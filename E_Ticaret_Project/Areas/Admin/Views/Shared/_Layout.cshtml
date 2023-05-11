@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | Empty Page</title>
+
+    <link href="~/Admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Admin/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="~/Admin/css/animate.css" rel="stylesheet">
+    <link href="~/Admin/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="">
+
+    <div id="wrapper">
+            @await Component.InvokeAsync("AdminNavbar")
+    
+        <div id="page-wrapper" class="gray-bg">
+
+            @await Component.InvokeAsync("AdminHeader")
+
+            @RenderBody()
+
+            @await Component.InvokeAsync("AdminFooter")
+
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="~/Admin/js/jquery-3.1.1.min.js"></script>
+    <script src="~/Admin/js/popper.min.js"></script>
+    <script src="~/Admin/js/bootstrap.js"></script>
+    <script src="~/Admin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Admin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="~/Admin/js/inspinia.js"></script>
+    <script src="~/Admin/js/plugins/pace/pace.min.js"></script>
+
+
+</body>
+@await RenderSectionAsync("Scripts", required: false)
+</html>
+
+
+
+

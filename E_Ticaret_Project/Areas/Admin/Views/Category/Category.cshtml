@@ -25,7 +25,6 @@
     </div>
 </div>
 
-
 @*// GÜNCELLE modelimin tasarımı*@
 <div class="modal inmodal fade" id="myModal6" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -48,8 +47,7 @@
     </div>
 </div>
 
-
-@*Kategorinin CRUD işlemleri*@
+@*DataTable*@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
@@ -69,6 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                           @* normalde buraya foreach yaparız ama ajaxla tabloyu doldurucaz*@
                         </tbody>
                     </table>
 
@@ -81,32 +80,13 @@
 @section Scripts
  {
 
+@*datatable ı ajax ile dolduruyoruz*@
 <script>
     var table = null;
     $(function () {
         table = $('#categoryTablosu').DataTable({
             pageLength: 10,
             responsive: true,
-            responsive: true,
-            dom: '<"html5buttons"B>lTfgitp',
-            buttons: [
-                { extend: 'copy' },
-                { extend: 'csv' },
-                { extend: 'excel', title: 'ExampleFile' },
-                { extend: 'pdf', title: 'ExampleFile' },
-
-                {
-                    extend: 'print',
-                    customize: function (win) {
-                        $(win.document.body).addClass('white-bg');
-                        $(win.document.body).css('font-size', '10px');
-
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-                    }
-                }
-            ],
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
             },
@@ -122,7 +102,6 @@
                 {
                     data: null,
                     render: function (data, type, row) {
-                        //<button type="button" class="btn btn-primary" data - toggle="modal" data - target="#myModal5" > <i class="fa fa-plus pr-1" > </i>Ekle</button >
                         return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#myModal6" onclick="kategoriGuncelle(' + data.categoryID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
                                '<button class="btn btn-danger mr-2" type="button" onclick="kategoriSil(' + data.categoryID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
                     }
@@ -133,7 +112,7 @@
 
 </script>
 
-
+@*ajax ile veri ekleme işlemi*@
 <script>
 
     $('#ekleForm').submit(function (e) {
@@ -145,68 +124,22 @@
             type: 'POST',
             data: form.serialize(),
             success: function (response) {
-                console.log("ekleme işlemi başarılı");
                 form.trigger("reset"); //formdaki verileri temizle artık onlarla işin kalmadı
                 form = null; //formdan gelen verileri karşılayan değişkeninde içini siliyorum ki arka arkaya veriler eklediğimde form değişkeninde birikme olmasın
-                $('#myModal5').modal('hide');
+                $('#myModal5').modal('hide'); //modeli kapatır
                 table.ajax.reload(); // Eklenen veriyi de tabloya eklemek için tabloyu yeniden yükle
                 toastr.success('Kategori ekleme işlemi başarılı.');
             },
             error: function (xhr, status, error) {
-                console.log("Hata: " + error);
+                toastr.error('Kategori ekleme işlemi sırasında bir hata meydana geldi.');
             }
         });
     });
 
 </script>
 
-
-
-
+@*ajax ile veri güncelleme işlemi*@
 <script>
-
-    //function kategoriGuncelle(id) {
-    //    $.ajax({
-    //        url: '/Admin/Category/GetCategoryById/' + id,
-    //        type: 'GET',
-    //        dataType: 'json',
-    //        success: function (response) {
-    //            // Form elemanlarının değerlerini güncelleme
-    //            console.log("Verilerim : " + response.categoryName);
-    //           // $('#CategoryName').val(response.categoryName);
-    //            $('#guncelleForm input[name="CategoryName"]').val(response.categoryName);
-
-    //            // Güncelleme işlemi için form submit işlemi
-    //            $('#guncelleForm').submit(function (e) {
-    //                e.preventDefault();
-    //                var form = $(this);
-    //                var data = form.serialize();
-
-    //                $.ajax({
-    //                    url: '/Admin/Category/CategoryUpdate',
-    //                    type: 'POST',
-    //                    data: { category: data, id: id },
-    //                    success: function (response) {
-    //                        // Başarılı bir şekilde güncellendiğinde yapılacak işlemler
-    //                        console.log(response);
-    //                        $('#myModal6').trigger('click.dismiss.bs.modal');
-    //                        table.ajax.reload(); // Güncellenen veriyi de tabloya eklemek için tabloyu yeniden yükle
-    //                        toastr.success('Kategori güncelleme işlemi başarılı.');
-    //                    },
-    //                    error: function (xhr, status, error) {
-    //                        // Hata durumunda yapılacak işlemler
-    //                        console.log("Hata: " + error);
-    //                    }
-    //                });
-    //            });
-    //        },
-    //        error: function (xhr, status, error) {
-    //            // Hata durumunda yapılacak işlemler
-    //            console.log("Hata: " + error);
-    //        }
-    //    });
-    //}
-
 
     function kategoriGuncelle(id) {
         $.ajax({
@@ -214,12 +147,11 @@
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                // Form elemanlarının değerlerini güncelleme
-                console.log("Verilerim : " + response.categoryName);
-                // $('#CategoryName').val(response.categoryName);
-                $('#guncelleForm input[name="CategoryID"]').val(response.categoryID);
-                $('#guncelleForm input[name="CategoryName"]').val(response.categoryName);
-
+                //GetCategoryById'den ggelen verileri inputlara dolduruyoruz
+                $.each(response, function (key, value) {
+                    var inputName = key.charAt(0).toUpperCase() + key.slice(1);
+                    $('#guncelleForm input[name="' + inputName + '"]').val(value);
+                });
                 // Güncelleme işlemi için form submit işlemi
                 $('#guncelleForm').off('submit').on('submit', function (e) {
                     e.preventDefault();
@@ -232,37 +164,29 @@
                         data: data,
                         success: function (response) {
                             // Başarılı bir şekilde güncellendiğinde yapılacak işlemler
-                            console.log(response);
-                            $('#myModal6').trigger('click.dismiss.bs.modal');
+                            $('#myModal6').modal('hide');
                             table.ajax.reload(); // Güncellenen veriyi de tabloya eklemek için tabloyu yeniden yükle
                             toastr.success('Kategori güncelleme işlemi başarılı.');
                         },
                         error: function (xhr, status, error) {
                             // Hata durumunda yapılacak işlemler
-                            console.log("Hata: " + error);
+                            toastr.error('Kategori güncelleme işlemi sırasında bir hata meydana geldi.');
                         }
                     });
                 });
             },
             error: function (xhr, status, error) {
                 // Hata durumunda yapılacak işlemler
-                console.log("Hata: " + error);
+                toastr.error('Kategori bilgileri getirilirken bir hata meydana geldi.');
             }
         });
     }
 
 </script>
 
-
-
-
-
-
-
-
-
-
+@*ajax ile veri silme işlemi*@
 <script>
+
     function kategoriSil(kategoriId) {
         $.ajax({
             url: '/Admin/Category/CategoryDelete',
@@ -272,14 +196,15 @@
                 // Başarılı bir şekilde silindiğinde yapılacak işlemler
                 console.log(response);
                 table.ajax.reload();  //Silme işlemi bittikten sonra tabloyu yeniden göstersin
-
                 toastr.success('Kategori silme işlemi başarılı.');
             },
             error: function (xhr, status, error) {
                 // Hata durumunda yapılacak işlemler
-                console.log("Hata: " + error);
+                toastr.error('Kategori bilgileri silinirken bir hata meydana geldi.');
             }
         });
     }
+
 </script>
+
 }

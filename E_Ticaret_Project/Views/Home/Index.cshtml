@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Product>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -55,17 +56,37 @@
 </div>
 
 
-<section class="container features">
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>
-<h1>x</h1>    
-<h1>x</h1>
-</section>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="ibox">
+                    <div class="ibox-content product-box">
+
+                        <div class="product-imitation">
+                            Buraya Resim Koyunuz
+                        </div>
+                        <div class="product-desc">
+                            <span class="product-price">
+                                @item.ProductPrice ₺
+                            </span>
+                            <small class="text-muted">@item.Category.CategoryName</small>
+                            <a href="#" class="product-name"> @item.ProductName </a>
+
+                            <div class="small m-t-xs">
+                                @item.ProductDescription
+                            </div>
+                            <div class="m-t text-righ">
+
+                                <a href="#" class="btn btn-xs btn-outline btn-primary">Ürüne Git <i class="fa fa-long-arrow-right pl-1"></i> </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Ticaret_Project.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230514165620_urunlergeldi")]
-    partial class urunlergeldi
+    [Migration("20230514172135_firstmig")]
+    partial class firstmig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,24 @@ namespace E_Ticaret_Project.Migrations
                     b.HasKey("CategoryID");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("E_Ticaret_Project.Models.HomeSlider", b =>
+                {
+                    b.Property<int>("SliderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("SliderImageDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SliderImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SliderID");
+
+                    b.ToTable("HomeSliders");
                 });
 
             modelBuilder.Entity("E_Ticaret_Project.Models.Product", b =>

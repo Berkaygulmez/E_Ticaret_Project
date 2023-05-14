@@ -1,4 +1,4 @@
-﻿using E_Ticaret_Project.Migrations;
+﻿//using E_Ticaret_Project.Migrations;
 using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;

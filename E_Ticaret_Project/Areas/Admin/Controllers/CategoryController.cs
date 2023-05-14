@@ -1,4 +1,5 @@
-﻿using E_Ticaret_Project.Models;
+﻿using E_Ticaret_Project.Migrations;
+using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,27 +29,42 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
             return Json(categoryList); //json formatında gönderdim
         }
 
+        [HttpGet]
+        public JsonResult GetCategoryById(int id)
+        {
+            var tekKategoriVerisi = _baglanti.Categories.Where(x => x.CategoryID == id).FirstOrDefault();
+            return Json(tekKategoriVerisi); //json formatında gönderdim
+        }
 
         [HttpPost]
-        public IActionResult CategoryAdd(Category category)
+        public JsonResult CategoryAdd(Category category)
         {
             _baglanti.Categories.Add(category);
             _baglanti.SaveChanges();
 
-            return RedirectToAction();
+            return Json(new { success = true });
         }
 
+        [HttpPost]
+        public JsonResult CategoryUpdate(Category data)
+        {
+            _baglanti.Categories.Update(data);
+            _baglanti.SaveChanges();
+
+            return Json(new { success = true });
+        }
 
         [HttpPost]
-        public IActionResult CategoryDelete(int categoryID)
+        public JsonResult CategoryDelete(int categoryID)
         {
             var silinecekKategori = _baglanti.Categories.Find(categoryID);
 
             _baglanti.Categories.Remove(silinecekKategori);
             _baglanti.SaveChanges();
 
-            return RedirectToAction("CategoryAdd");
+            return Json(new { success = true });
         }
+
 
     }
 }

@@ -4,18 +4,17 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-@*// modelimin tasarımı*@
+@*// EKLE modelimin tasarımı*@
 <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form method="post">
+            <form id="ekleForm">
                 <div class="modal-header pt-4 pb-3">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
                     <h3>Kategori Ekleme Sayfası</h3>
                 </div>
                 <div class="modal-body">
                     <input type="text" name="CategoryName" value="" placeholder="Kategori Adı" class="form-control" required>
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Kategoriyi Kaydet</button>
@@ -27,7 +26,27 @@
 </div>
 
 
-
+@*// GÜNCELLE modelimin tasarımı*@
+<div class="modal inmodal fade" id="myModal6" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="guncelleForm">
+                <div class="modal-header pt-4 pb-3">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                    <h3>Kategori Güncelleme Sayfası</h3>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="CategoryID" placeholder="Kategori Adı" class="form-control" required style="display: none;">
+                    <input type="text" name="CategoryName" placeholder="Kategori Adı" class="form-control" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Kategoriyi Güncelle</button>
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Kapat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 @*Kategorinin CRUD işlemleri*@
@@ -60,8 +79,7 @@
 </div>
 
 @section Scripts
-    {
-
+ {
 
 <script>
     var table = null;
@@ -104,8 +122,9 @@
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<button class="btn btn-warning mr-2" type="button"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
-                            '<button class="btn btn-danger" type="button" onclick="kategoriSil(' + data.categoryID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
+                        //<button type="button" class="btn btn-primary" data - toggle="modal" data - target="#myModal5" > <i class="fa fa-plus pr-1" > </i>Ekle</button >
+                        return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#myModal6" onclick="kategoriGuncelle(' + data.categoryID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
+                               '<button class="btn btn-danger mr-2" type="button" onclick="kategoriSil(' + data.categoryID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
                     }
                 }
             ]
@@ -113,6 +132,135 @@
     });
 
 </script>
+
+
+<script>
+
+    $('#ekleForm').submit(function (e) {
+        e.preventDefault();
+        var form = $(this);
+
+        $.ajax({
+            url: '/Admin/Category/CategoryAdd',
+            type: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+                console.log("ekleme işlemi başarılı");
+                form.trigger("reset"); //formdaki verileri temizle artık onlarla işin kalmadı
+                form = null; //formdan gelen verileri karşılayan değişkeninde içini siliyorum ki arka arkaya veriler eklediğimde form değişkeninde birikme olmasın
+                $('#myModal5').modal('hide');
+                table.ajax.reload(); // Eklenen veriyi de tabloya eklemek için tabloyu yeniden yükle
+                toastr.success('Kategori ekleme işlemi başarılı.');
+            },
+            error: function (xhr, status, error) {
+                console.log("Hata: " + error);
+            }
+        });
+    });
+
+</script>
+
+
+
+
+<script>
+
+    //function kategoriGuncelle(id) {
+    //    $.ajax({
+    //        url: '/Admin/Category/GetCategoryById/' + id,
+    //        type: 'GET',
+    //        dataType: 'json',
+    //        success: function (response) {
+    //            // Form elemanlarının değerlerini güncelleme
+    //            console.log("Verilerim : " + response.categoryName);
+    //           // $('#CategoryName').val(response.categoryName);
+    //            $('#guncelleForm input[name="CategoryName"]').val(response.categoryName);
+
+    //            // Güncelleme işlemi için form submit işlemi
+    //            $('#guncelleForm').submit(function (e) {
+    //                e.preventDefault();
+    //                var form = $(this);
+    //                var data = form.serialize();
+
+    //                $.ajax({
+    //                    url: '/Admin/Category/CategoryUpdate',
+    //                    type: 'POST',
+    //                    data: { category: data, id: id },
+    //                    success: function (response) {
+    //                        // Başarılı bir şekilde güncellendiğinde yapılacak işlemler
+    //                        console.log(response);
+    //                        $('#myModal6').trigger('click.dismiss.bs.modal');
+    //                        table.ajax.reload(); // Güncellenen veriyi de tabloya eklemek için tabloyu yeniden yükle
+    //                        toastr.success('Kategori güncelleme işlemi başarılı.');
+    //                    },
+    //                    error: function (xhr, status, error) {
+    //                        // Hata durumunda yapılacak işlemler
+    //                        console.log("Hata: " + error);
+    //                    }
+    //                });
+    //            });
+    //        },
+    //        error: function (xhr, status, error) {
+    //            // Hata durumunda yapılacak işlemler
+    //            console.log("Hata: " + error);
+    //        }
+    //    });
+    //}
+
+
+    function kategoriGuncelle(id) {
+        $.ajax({
+            url: '/Admin/Category/GetCategoryById/' + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                // Form elemanlarının değerlerini güncelleme
+                console.log("Verilerim : " + response.categoryName);
+                // $('#CategoryName').val(response.categoryName);
+                $('#guncelleForm input[name="CategoryID"]').val(response.categoryID);
+                $('#guncelleForm input[name="CategoryName"]').val(response.categoryName);
+
+                // Güncelleme işlemi için form submit işlemi
+                $('#guncelleForm').off('submit').on('submit', function (e) {
+                    e.preventDefault();
+                    var form = $(this);
+                    var data = form.serialize();
+
+                    $.ajax({
+                        url: '/Admin/Category/CategoryUpdate',
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            // Başarılı bir şekilde güncellendiğinde yapılacak işlemler
+                            console.log(response);
+                            $('#myModal6').trigger('click.dismiss.bs.modal');
+                            table.ajax.reload(); // Güncellenen veriyi de tabloya eklemek için tabloyu yeniden yükle
+                            toastr.success('Kategori güncelleme işlemi başarılı.');
+                        },
+                        error: function (xhr, status, error) {
+                            // Hata durumunda yapılacak işlemler
+                            console.log("Hata: " + error);
+                        }
+                    });
+                });
+            },
+            error: function (xhr, status, error) {
+                // Hata durumunda yapılacak işlemler
+                console.log("Hata: " + error);
+            }
+        });
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
 
 <script>
     function kategoriSil(kategoriId) {

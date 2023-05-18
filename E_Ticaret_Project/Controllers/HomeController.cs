@@ -1,5 +1,6 @@
 ﻿using E_Ticaret_Project.Models;
 using E_Ticaret_Project.ViewComponents;
+using E_Ticaret_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,10 +23,20 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult Index()
         {
-            
-            var productlist = _baglanti.Products.ToList();
-            var categorylist = _baglanti.Categories.ToList(); // Burada ürünlerin kategorilerini getirdik
-            return View(productlist);
+            HomeModel model = new HomeModel();
+            model.Products = _baglanti.Products.ToList();
+            model.Categories = _baglanti.Categories.ToList(); // Burada ürünlerin kategorilerini getirdik
+
+
+            var sonEklenenSliderID = _baglanti.HomeSliders.Max(y => y.SliderID);
+            var sonEklenenSlider = _baglanti.HomeSliders.Where(x => x.SliderID == sonEklenenSliderID).FirstOrDefault();
+
+            ViewBag.SliderImageName = sonEklenenSlider.SliderPhotoName;
+
+
+            model.HomeSliders=_baglanti.HomeSliders.Where(x=>x.SliderID != sonEklenenSliderID).ToList();
+
+            return View(model);
         }
 
     }

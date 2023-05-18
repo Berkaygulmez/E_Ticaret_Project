@@ -8,14 +8,16 @@
 <div class="modal inmodal fade" id="addSlider" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="addForm">
+            <form id="addForm" enctype="multipart/form-data">
                 <div class="modal-header pt-4 pb-3">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
                     <h3>Slider Ekleme Sayfası</h3>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="SliderImageUrl" placeholder="Slider URL'si'" class="form-control" required>
-                    <input type="text" name="SliderImageDescription" placeholder="Slider Açıklaması" class="form-control" required>
+                    @*   <input type="file" name="SliderPhoto" id="fileInput" />*@
+                    <input type="file" class="form-control" id="sliderPhoto" name="sliderPhoto" accept="image/*" required>
+                    <input type="text" name="SliderImageUrl" placeholder="Slider URL'si'" class="form-control">
+                    <input type="text" name="SliderImageDescription" placeholder="Slider Açıklaması" class="form-control">
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Slider'ı Kaydet</button>
@@ -68,6 +70,7 @@
                                 <th>Slider ID</th>
                                 <th>Slider URL</th>
                                 <th>Slider Açıklaması</th>
+                                <th>Foto</th>
                                 <th>İşlemler</th>
                             </tr>
                         </thead>
@@ -100,11 +103,12 @@
                 type: 'GET',
                 dataType: 'json',
                 dataSrc: ''
-            }, 
+            },
             columns: [
                 { data: 'sliderID' },
                 { data: 'sliderImageUrl' },
                 { data: 'sliderImageDescription' },
+                { data: 'sliderPhotoName' },
                 {
                     data: null,
                     render: function (data, type, row) {                                                                                                        //ilk harf küçük olcaktı çocuk adam gerisi doğru
@@ -122,13 +126,16 @@
 <script>
 
     $('#addForm').submit(function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Formun otomatik olarak submit olmasını engeller
         var form = $(this);
+        var formData = new FormData($(this)[0]); // Form verilerini FormData nesnesine dönüştürür
 
         $.ajax({
-            url: '/Admin/Slider/SliderAdd',
+            url: '/Admin/Slider/SliderAdd', // API endpointinizi buraya yazın
             type: 'POST',
-            data: form.serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 form.trigger("reset"); //formdaki verileri temizle artık onlarla işin kalmadı
                 form = null; //formdan gelen verileri karşılayan değişkeninde içini siliyorum ki arka arkaya veriler eklediğimde form değişkeninde birikme olmasın
@@ -137,10 +144,14 @@
                 toastr.success('Slider ekleme işlemi başarılı.');
             },
             error: function (xhr, status, error) {
+                // Hata durumunda yapılacak işlemler
                 toastr.error('Slider ekleme işlemi sırasında bir hata meydana geldi.');
             }
         });
     });
+
+
+
 
 </script>
 

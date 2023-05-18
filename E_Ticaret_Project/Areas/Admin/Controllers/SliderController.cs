@@ -1,6 +1,10 @@
 ﻿using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace E_Ticaret_Project.Areas.Admin.Controllers
 {
@@ -8,10 +12,12 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
     public class SliderController : Controller
     {
         private readonly MyDbContext _baglanti;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public SliderController(MyDbContext context)
+        public SliderController(MyDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _baglanti = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Slider()
@@ -33,11 +39,31 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult SliderAdd(HomeSlider homeSlider)
+        public JsonResult SliderAdd(HomeSlider homeSlider, IFormFile sliderPhoto)
         {
-            _baglanti.HomeSliders.Add(homeSlider);
-            _baglanti.SaveChanges();
+            if (sliderPhoto != null && sliderPhoto.Length > 0)
+            {
+                // Fotoğrafı yüklemek için benzersiz bir dosya adı oluşturun
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + sliderPhoto.FileName;
 
+                // Fotoğrafı kaydetmek için hedef dosya yolunu oluşturun
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Image/SliderImage");
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Dosyayı diskte kaydedin
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    sliderPhoto.CopyTo(fileStream);
+                }
+
+                // Veritabanına kaydetme işlemi
+                homeSlider.SliderPhotoName = uniqueFileName;
+
+                _baglanti.HomeSliders.Add(homeSlider);
+                _baglanti.SaveChanges();
+            }
+
+   
             return Json(new { success = true });
         }
 
@@ -54,6 +80,18 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
         public JsonResult SliderDelete(int SliderID)
         {
             var silinecekSlider = _baglanti.HomeSliders.Find(SliderID);
+
+            if (silinecekSlider == null)
+            {
+                return Json(new { success = false, message = "Slider bulunamadı" });
+            }
+
+            string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Image/SliderImage", silinecekSlider.SliderPhotoName);
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
 
             _baglanti.HomeSliders.Remove(silinecekSlider);
             _baglanti.SaveChanges();

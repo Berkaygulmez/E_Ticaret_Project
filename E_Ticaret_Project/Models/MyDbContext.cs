@@ -13,5 +13,6 @@ namespace E_Ticaret_Project.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<HomeSlider> HomeSliders { get; set; }
 
+        public DbSet<Register> Registers { get; set; } 
     }
 }

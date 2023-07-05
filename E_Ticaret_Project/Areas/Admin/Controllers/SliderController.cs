@@ -63,7 +63,7 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
                 _baglanti.SaveChanges();
             }
 
-   
+
             return Json(new { success = true });
         }
 
@@ -86,11 +86,14 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Slider bulunamadı" });
             }
 
-            string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Image/SliderImage", silinecekSlider.SliderPhotoName);
-
-            if (System.IO.File.Exists(imagePath))
+            if (silinecekSlider.SliderPhotoName != null) //Silinecek fotoğraf adı boşsa if içindeki kodlar çalışmasın :)
             {
-                System.IO.File.Delete(imagePath);
+                string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "Image/SliderImage", silinecekSlider.SliderPhotoName);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
             }
 
             _baglanti.HomeSliders.Remove(silinecekSlider);

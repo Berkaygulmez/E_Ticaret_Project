@@ -1,4 +1,4 @@
-﻿
+﻿@model Register
 @{
     Layout = null;
 }
@@ -11,7 +11,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Register</title>
 
     <link href="~/Admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/Admin/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -30,27 +29,34 @@
                 <h1 class="logo-name">IN+</h1>
 
             </div>
-            <h3>Register to IN+</h3>
-            <p>Create account to see it in action.</p>
-            <form class="m-t" role="form" action="login.html">
+            <h3>Hemen kaydolun ve keşfedin!</h3>
+            <p>Aşağıdaki bilgileri doldurunuz.</p>
+            <form class="m-t" method="post" action="/Register/Index">
+                @*Burda method post çalıştığında action çalışır oda register controller daki Index i tetikler*@
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Name" required="">
+                    <input type="text" class="form-control" placeholder="İsim Soyisim" name="NameSurname" required="">  @*inputların name özelliklerine de veritabanındaki alana karşılık gelecek şekilde ayarla işte *@
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" placeholder="Email" required="">
+                    <input type="text" class="form-control" placeholder="Kullanıcı Adı" name="UserName" required="">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" required="">
+                    <input type="email" class="form-control" placeholder="E-mail" name="Mail" required="">
                 </div>
                 <div class="form-group">
-                    <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> Agree the terms and policy </label></div>
+                    <input type="password" class="form-control" placeholder="Şifre" name="Password" required="">
                 </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Şifre Tekrar" name="ConfirmPassword" onkeyup="SifreKontrol()" required="">
+                </div>
+                <div class="form-group">
+                    <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> Gizlilik Sözleşmesini Kabul Ediyorum. </label></div>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b" id="kaydolBtn" disabled>KAYDOL</button> @*Forumun post olayını tetikleyen şey form içinde type=submit olan buttondur*@
 
-                <p class="text-muted text-center"><small>Already have an account?</small></p>
-                <a class="btn btn-sm btn-white btn-block" href="login.html">Login</a>
+                <p class="text-muted text-center"><small>Bir hesabınız var ise giriş yapın!</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="login.html">Giriş Yap</a>
             </form>
-            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+            <p class="m-t"> <small>Tüm Hakları Saklıdır. @DateTime.Now.Year</small> </p>
         </div>
     </div>
 
@@ -66,8 +72,51 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-        }); //jj
+        });
     </script>
+
+    <!-- Sifre Kontorl Scripti -->
+    <script>
+        function SifreKontrol() { //Onkeyup methodu ile verilen isimin çağırıldıyı yere gider
+            var password = document.getElementsByName('Password')[0].value; //Şifre Alanına gelen şifreyi almak için kullanılır
+            var confirmPassword = document.getElementsByName('ConfirmPassword')[0].value; //Şifre tekrarından gelen veriyi almak için kullanılır
+          
+            var namesurname = document.getElementsByName('NameSurname')[0].value;
+            var username = document.getElementsByName('UserName')[0].value;            // aynı şekilde bunlarda ilk veriyi çeker
+            var mail = document.getElementsByName('Mail')[0].value;
+            //kopya burada yukarıdaki gibi diğer textbox ların value edeğerini alacaksın ve ifin içinde boşmu diye soracaksın boş değilse buton aktif oalcak
+
+            var kaydolBtn = document.getElementById('kaydolBtn'); //Kaydolbtn'una bir ID belirlendi ve o ID ile buton buraya çağırıldı.
+
+            //buraya şey ekleyebilirsin. iki şifre doğruysa çalışsın ama
+            if (password === confirmPassword) 
+            {
+                kaydolBtn.disabled = false;
+            } 
+            else 
+            {
+                if ((namesurname.trim() === '') && (username.trim() === '') && (mail.trim() === '')) //burdaki if diğer alanlara baksın isim alanında, mail alanında bir veri var mı diye kontrol etsin eğer varsa kaydet butonu aktif olsun
+                {
+                    kaydolBtn.disabled = true;
+                }             
+            }
+
+            //bunun altındaki kodlar gereksiz sadece consola bişey yazıyor kodun çalışıp çalışmadığını görmek için yazdı chatgpt
+            if (password === confirmPassword) {
+                console.log("Şifre eşleşti.");
+            } else {
+                console.log("Şifre eşleşmedi.");
+            }
+        }
+    </script>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
 </body>
 
 </html>

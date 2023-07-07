@@ -16,7 +16,7 @@
                 <div class="modal-body">
                     <input type="text" name="ProductName" placeholder="Ürün Adı" class="form-control" required>
                     <input type="text" name="ProductPrice" placeholder="Ürün Fiyatı" class="form-control" required>
-                    <input type="text" name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control" required>
+                    <textarea name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control form-control-lg" rows="5" required></textarea>
                     <input type="text" name="CategoryID" placeholder="Kategori ID" class="form-control" required>
                 </div>
                 <div class="modal-footer">
@@ -41,7 +41,8 @@
                     <input type="text" name="ProductID" placeholder="Ürün Adı" class="form-control" required style="display: none;">
                     <input type="text" name="ProductName" placeholder="Ürün Adı" class="form-control" required>
                     <input type="text" name="ProductPrice" placeholder="Ürün Fiyatı" class="form-control" required>
-                    <input type="text" name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control" required>
+                    @*<input type="text" name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control" required>*@
+                    <textarea name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control form-control-lg" rows="5" required></textarea>
                     <input type="text" name="CategoryID" placeholder="Kategori ID" class="form-control" required>
                 </div>
                 <div class="modal-footer">
@@ -72,7 +73,7 @@
                                 <th>Ürün Fiyatı</th>
                                 <th>Ürün Açıklaması</th>
                                 <th>Kategori</th>
-                                <th style ="min-width:150px;">İşlemler</th>
+                                <th style="min-width:150px;">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,10 +108,19 @@
             },
             columns: [
                 { data: 'productID' },
-                { data: 'productName' }, 
+                { data: 'productName' },
                 { data: 'productPrice' },
-                { data: 'productDescription' }, 
-                { data: 'categoryID' },         
+                {
+                    data: 'productDescription',
+                    render: function (data, type, row) {
+                        if (data.length > 50) {
+                            return data.substring(0, 50) + '...';
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { data: 'categoryID' },
                 {
                     data: null,
                     render: function (data, type, row) {
@@ -163,6 +173,7 @@
                 $.each(response, function (key, value) {
                     var inputName = key.charAt(0).toUpperCase() + key.slice(1);
                     $('#updateForm input[name="' + inputName + '"]').val(value);
+                    $('#updateForm textarea[name="' + inputName + '"]').val(value);
                 });
                 // Güncelleme işlemi için form submit işlemi
                 $('#updateForm').off('submit').on('submit', function (e) {

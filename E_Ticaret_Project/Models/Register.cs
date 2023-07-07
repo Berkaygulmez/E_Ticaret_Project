@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
 namespace E_Ticaret_Project.Models
@@ -11,5 +12,8 @@ namespace E_Ticaret_Project.Models
         public string Password { get; set; }
         public string Mail { get; set; }
         public string UserName { get; set; }
+        public DateTime LockoutEnd { get; set; }
+        public int AccessFailedCount { get; set; }
+
     }
 }

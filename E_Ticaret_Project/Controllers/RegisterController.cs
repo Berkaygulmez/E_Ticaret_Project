@@ -18,7 +18,7 @@ namespace E_Ticaret_Project.Controllers
         {
             return View();
         }
-     
+
         [HttpPost]
         public ActionResult Index(Register model)
         {
@@ -36,11 +36,18 @@ namespace E_Ticaret_Project.Controllers
                     return RedirectToAction("Index");
                 }
 
+                if (_baglanti.Registers.Any(r => r.UserName == model.UserName))
+                {
+                    ModelState.AddModelError("", "Bu kullanıcı adı zaten kullanımda.");
+                    TempData["ErrorMessage"] = "Bu kullanıcı adı zaten kullanımda.";
+                    return RedirectToAction("Index");
+                }
+
                 _baglanti.Registers.Add(model);
                 _baglanti.SaveChanges();
 
                 // Kayıt işlemi başarılı olduğunda, giriş sayfasına yönlendirin
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "LogIn");
             }
 
             // ModelState.IsValid false olduğunda, hata mesajlarıyla birlikte kayıt sayfasını tekrar gösterin

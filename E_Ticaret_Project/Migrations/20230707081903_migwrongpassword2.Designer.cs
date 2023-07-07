@@ -4,14 +4,16 @@ using E_Ticaret_Project.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_Ticaret_Project.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707081903_migwrongpassword2")]
+    partial class migwrongpassword2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,8 +96,8 @@ namespace E_Ticaret_Project.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LockoutEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Mail")
                         .HasColumnType("nvarchar(max)");

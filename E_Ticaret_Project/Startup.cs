@@ -38,6 +38,7 @@ namespace E_Ticaret_Project
                 options.RootDirectory = "/Areas";
             });
 
+
             //services.AddControllersWithViews().AddRazorPagesOptions(options =>
             //{
             //    options.Conventions.AddAreaPageRoute("Areas", "/Home/Index", "Home/Index");

@@ -6,7 +6,6 @@ namespace E_Ticaret_Project.ViewModels
     public class HomeModel
     {
         public List<Product> Products { get; set; }
-
         public List<Category> Categories { get; set; }
         public List<HomeSlider> HomeSliders { get; set; }
 

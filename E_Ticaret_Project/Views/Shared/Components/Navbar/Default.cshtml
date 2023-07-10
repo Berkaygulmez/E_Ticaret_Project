@@ -15,7 +15,7 @@
                 <li><a class="nav-link " href="/Home/Index">AnaSayfa</a></li>
                 @foreach (var item in Model)
                 {
-                    <li><a class="nav-link " href="/ProductList/ProductList">@item.CategoryName</a></li>
+                    <li><a class="nav-link " href="/ProductList/ProductList/@item.CategoryID">@item.CategoryName</a></li>
                 }
                 <li><a class="nav-link " href="/LogIn/Index">GİRİŞ YAP</a></li>
             </ul>

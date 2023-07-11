@@ -6,16 +6,16 @@ using System.Linq;
 namespace E_Ticaret_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ModelController : Controller
+    public class VersionController : Controller
     {
         private readonly MyDbContext _baglanti;
 
-        public ModelController(MyDbContext context)
+        public VersionController(MyDbContext context)
         {
             _baglanti = context;
         }
 
-        public IActionResult Model()
+        public IActionResult Version()
         {
             List<Category> kategoriler = _baglanti.Categories.Select(x => new Category { CategoryID = x.CategoryID, CategoryName = x.CategoryName }).ToList();
 
@@ -30,43 +30,43 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
 
         //Bu methodda Model sayfasındaki datatable veri gönderiyoruz, return olarak json gönderiyoruz
         [HttpGet]
-        public IActionResult ModelList()
+        public IActionResult VersionList()
         {
-            var ModelList = _baglanti.Models.ToList(); //normal verileri çektim
+            var ModelList = _baglanti.Versions.ToList(); //normal verileri çektim
             return Json(ModelList); //json formatında gönderdim
         }
 
         [HttpGet]
-        public JsonResult GetModelById(int id)
+        public JsonResult GetVersionById(int id)
         {
-            var tekModelVerisi = _baglanti.Models.Where(x => x.ModelID == id).FirstOrDefault();
+            var tekModelVerisi = _baglanti.Versions.Where(x => x.VersionID == id).FirstOrDefault();
             return Json(tekModelVerisi); //json formatında gönderdim
         }
 
         [HttpPost]
-        public JsonResult ModelAdd(Model Model)
+        public JsonResult VersionAdd(Version Model)
         {
-            _baglanti.Models.Add(Model);
+            _baglanti.Versions.Add(Model);
             _baglanti.SaveChanges();
 
             return Json(new { success = true });
         }
 
         [HttpPost]
-        public JsonResult ModelUpdate(Model data)
+        public JsonResult VersionUpdate(Version data)
         {
-            _baglanti.Models.Update(data);
+            _baglanti.Versions.Update(data);
             _baglanti.SaveChanges();
 
             return Json(new { success = true });
         }
 
         [HttpPost]
-        public JsonResult ModelDelete(int ModelID)
+        public JsonResult VersionDelete(int VersionID)
         {
-            var silinecekMarka = _baglanti.Models.Find(ModelID);
+            var silinecekMarka = _baglanti.Versions.Find(VersionID);
 
-            _baglanti.Models.Remove(silinecekMarka);
+            _baglanti.Versions.Remove(silinecekMarka);
             _baglanti.SaveChanges();
 
             return Json(new { success = true });

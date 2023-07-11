@@ -1,6 +1,7 @@
 ﻿//using E_Ticaret_Project.Migrations;
 using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace E_Ticaret_Project.Areas.Admin.Controllers
@@ -17,6 +18,19 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
 
         public IActionResult Product()
         {
+            //Product sayfası yüklenirken en başta kategorilerimi markalarımı modellerimi ekledim buraya
+            //Kategoriler
+            List<Category> kategoriler = _baglanti.Categories.Select(x => new Category { CategoryID = x.CategoryID, CategoryName = x.CategoryName }).ToList();
+            ViewBag.Kategoriler = kategoriler;
+
+            //Markalar
+            List<Trademark> markalar = _baglanti.Trademarks.Select(x => new Trademark { TrademarkID = x.TrademarkID, TrademarkName = x.TrademarkName, CategoryID = x.CategoryID }).ToList();
+            ViewBag.Markalar = markalar;
+
+            //Modeller
+            List<Version> modeller = _baglanti.Versions.Select(x => new Version { VersionID = x.VersionID, VersionName = x.VersionName, TrademarkID = x.TrademarkID }).ToList();
+            ViewBag.Modeller = modeller;
+
             return View();
         }
 

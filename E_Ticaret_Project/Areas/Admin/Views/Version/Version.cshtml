@@ -1,4 +1,4 @@
-﻿@model List<Model>
+﻿@model List<E_Ticaret_Project.Models.Version>
 @{
     ViewData["Title"] = "CategoryAdd";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -28,7 +28,7 @@
                     </select>
 
 
-                    <input type="text" name="ModelName" value="" placeholder="Model Adı" class="form-control" required>
+                    <input type="text" name="VersionName" value="" placeholder="Model Adı" class="form-control" required>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Modeli Kaydet</button>
@@ -49,8 +49,8 @@
                     <h3>Model Güncelleme Sayfası</h3>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="ModelID" placeholder="Olması gereken ama gözükmeyen ID" class="form-control" style="display:none;">
-                    <input type="text" name="ModelName" placeholder="Model Adı" class="form-control" required>
+                    <input type="text" name="VersionID" placeholder="Olması gereken ama gözükmeyen ID" class="form-control" style="display:none;">
+                    <input type="text" name="VersionName" placeholder="Model Adı" class="form-control" required>
 
                    <select class="form-control m-b" name="TrademarkID">
                         @foreach (var marka in ViewBag.Markalar)
@@ -113,21 +113,21 @@
                 url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
             },
             ajax: {
-                url: '/Admin/Model/ModelList',
+                url: '/Admin/Version/VersionList',
                 type: 'GET',
                 dataType: 'json',
                 dataSrc: ''
             },
             columns: [
-                { data: 'modelID' },
-                { data: 'modelName' },
+                { data: 'versionID' },
+                { data: 'versionName' },
                 { data: 'trademarkID' },
 
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#myModal6" onclick="modelGuncelle(' + data.modelID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
-                            '<button class="btn btn-danger mr-2" type="button" onclick="modelSil(' + data.modelID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
+                        return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#myModal6" onclick="versionGuncelle(' + data.versionID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
+                            '<button class="btn btn-danger mr-2" type="button" onclick="versionSil(' + data.versionID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
                     }
                 }
             ]
@@ -145,7 +145,7 @@
         var form = $(this);
 
         $.ajax({
-            url: '/Admin/Model/ModelAdd',
+            url: '/Admin/Version/VersionAdd',
             type: 'POST',
             data: form.serialize(),
             success: function (response) {
@@ -166,13 +166,13 @@
 @*ajax ile veri güncelleme işlemi*@
 <script>
 
-    function modelGuncelle(id) {
+    function versionGuncelle(id) {
         $.ajax({
-            url: '/Admin/Model/GetModelById/' + id,
+            url: '/Admin/Version/GetVersionById/' + id,
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                //GetModelById'den ggelen verileri inputlara dolduruyoruz
+                //GetVersionById'den ggelen verileri inputlara dolduruyoruz
                 $.each(response, function (key, value) {
                     var inputName = key.charAt(0).toUpperCase() + key.slice(1);
                     $('#updateForm input[name="' + inputName + '"]').val(value); //güncelle formundaki inputları dolduruyoruz
@@ -185,7 +185,7 @@
                     var data = form.serialize();
 
                     $.ajax({
-                        url: '/Admin/Model/ModelUpdate',
+                        url: '/Admin/Version/VersionUpdate',
                         type: 'POST',
                         data: data,
                         success: function (response) {
@@ -215,11 +215,11 @@
 @*ajax ile veri silme işlemi*@
 <script>
 
-    function modelSil(modelId) {
+    function versionSil(versionID) {
         $.ajax({
-            url: '/Admin/Model/ModelDelete',
+            url: '/Admin/Version/VersionDelete',
             type: 'POST',
-            data: { modelID: modelId }, // Silinecek marka ID'si
+            data: { versionID: versionID }, // Silinecek marka ID'si
             success: function (response) {
                 // Başarılı bir şekilde silindiğinde yapılacak işlemler
                 console.log(response);

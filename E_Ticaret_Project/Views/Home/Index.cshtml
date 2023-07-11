@@ -7,11 +7,13 @@
 <div id="inSlider" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#inSlider" data-slide-to="0" class="active"></li>
-        @foreach (var item in Model.HomeSliders)
+        @if (Model.HomeSliders != null)
         {
-            <li data-target="#inSlider" data-slide-to="1"></li>
+            @foreach (var item in Model.HomeSliders)
+            {
+                <li data-target="#inSlider" data-slide-to="1"></li>
+            }
         }
-
     </ol>
 
     <div class="carousel-inner" role="listbox">
@@ -30,22 +32,24 @@
             </div>
             <img class="header-back" src="~/Image/SliderImage/@ViewBag.SliderImageName" />
         </div>
-
-        @foreach (var item in Model.HomeSliders)
+        @if (Model.HomeSliders != null)
         {
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="carousel-caption blank">
+            @foreach (var item in Model.HomeSliders)
+            {
+                <div class="carousel-item">
+                    <div class="container">
+                        <div class="carousel-caption blank">
 
-                        <h1>@item.SliderTitle</h1>
-                        <p>@item.SliderImageDescription</p>
-                            <p><a class="btn btn-lg btn-primary" href="@item.SliderImageUrl" role="button">GİT</a></p>              
+                            <h1>@item.SliderTitle</h1>
+                            <p>@item.SliderImageDescription</p>
+                            <p><a class="btn btn-lg btn-primary" href="@item.SliderImageUrl" role="button">GİT</a></p>
+                        </div>
                     </div>
+                    <!-- Set background for slide in css -->
+                    @*     <div class="header-back two"></div>*@
+                    <img class="header-back" src="~/Image/SliderImage/@item.SliderPhotoName" />
                 </div>
-                <!-- Set background for slide in css -->
-                @*     <div class="header-back two"></div>*@
-                <img class="header-back" src="~/Image/SliderImage/@item.SliderPhotoName" />
-            </div>
+            }
         }
 
     </div>
@@ -68,8 +72,8 @@
         @foreach (var item in Model.Products)
         {
             <div class="col-md-3">
-      @*          <div class="ibox">
-                    <div class="ibox-content product-box">*@
+                @*          <div class="ibox">
+            <div class="ibox-content product-box">*@
                 <div class="card h-100">
                     <div class="card-body d-flex flex-column">
 

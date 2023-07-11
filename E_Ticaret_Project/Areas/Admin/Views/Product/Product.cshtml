@@ -17,7 +17,22 @@
                     <input type="text" name="ProductName" placeholder="Ürün Adı" class="form-control" required>
                     <input type="text" name="ProductPrice" placeholder="Ürün Fiyatı" class="form-control" required>
                     <textarea name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control form-control-lg" rows="5" required></textarea>
-                    <input type="text" name="CategoryID" placeholder="Kategori ID" class="form-control" required>
+
+                    <select class="form-control m-b" name="CategoryID" onchange="KategoriDegisti(this.value)">
+                        @foreach (var kategori in ViewBag.Kategoriler)
+                        {
+                            <option value="@kategori.CategoryID">@kategori.CategoryName</option>
+                        }
+                    </select>
+
+                    <select class="form-control m-b" name="TrademarkID" onchange="ModelDegisti(this.value)">
+                        <option value=""></option>
+                    </select>
+
+                    <select class="form-control m-b" name="VersionID">
+                        <option value=""></option>
+                    </select>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Ürünü Kaydet</button>
@@ -41,9 +56,23 @@
                     <input type="text" name="ProductID" placeholder="Ürün Adı" class="form-control" required style="display: none;">
                     <input type="text" name="ProductName" placeholder="Ürün Adı" class="form-control" required>
                     <input type="text" name="ProductPrice" placeholder="Ürün Fiyatı" class="form-control" required>
-                    @*<input type="text" name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control" required>*@
                     <textarea name="ProductDescription" placeholder="Ürün Açıklaması" class="form-control form-control-lg" rows="5" required></textarea>
-                    <input type="text" name="CategoryID" placeholder="Kategori ID" class="form-control" required>
+
+                    <select class="form-control m-b" name="CategoryID" onchange="KategoriDegisti(this.value)">
+                        @foreach (var kategori in ViewBag.Kategoriler)
+                        {
+                            <option value="@kategori.CategoryID">@kategori.CategoryName</option>
+                        }
+                    </select>
+
+                    <select class="form-control m-b" name="TrademarkID" onchange="ModelDegisti(this.value)">
+                        <option value=""></option>
+                    </select>
+
+                    <select class="form-control m-b" name="VersionID">
+                        <option value=""></option>
+                    </select>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Ürünü Güncelle</button>
@@ -73,6 +102,8 @@
                                 <th>Ürün Fiyatı</th>
                                 <th>Ürün Açıklaması</th>
                                 <th>Kategori</th>
+                                <th>Marka</th>
+                                <th>Model</th>
                                 <th style="min-width:150px;">İşlemler</th>
                             </tr>
                         </thead>
@@ -89,6 +120,70 @@
 
 @section Scripts
  {
+     @*Kategori değiştiğinde Markayı seçilen kategoriye göre değiştiren, marka değiştiğinde modeli markaya göre değiştiren kodlar*@
+<script>
+
+    //sayfa ilk açıldığında bir kerelik bu function çalışsın ki select öğeleri boş kalmasın
+    window.onload = function () {
+        KategoriDegisti(document.getElementsByName("CategoryID")[0].value);
+    };
+
+    function KategoriDegisti(selectedValue) {
+        // ViewBag.Markalar içinde veritabanındaki tüm kategorileri aldık
+        var markalar = @Html.Raw(Json.Serialize(ViewBag.Markalar));
+
+        // Bize sadece kategorinin markaları lazım, bu yüzden bir filtre uyguladık.
+        // Örneğin, telefon seçildiğinde sadece Apple ve Samsung markaları gelecek.
+        var filtrelenmisMarkalar = markalar.filter(function (marka) {
+            return marka.categoryID == selectedValue;
+        });
+
+        // TrademarkID isimli select öğesini aldık
+        var selectElements = document.getElementsByName("TrademarkID");
+
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+            selectElement.innerHTML = ""; // İçinde bir şeyler varsa sildik ki karışıklık oluşmasın
+
+            // Burada bize lazım olan markaların bulunduğu diziyi TrademarkID isimli select öğesine ekledik
+            filtrelenmisMarkalar.forEach(function (marka) {
+                var optionElement = document.createElement("option");
+                optionElement.value = marka.trademarkID;
+                optionElement.textContent = marka.trademarkName;
+                selectElement.appendChild(optionElement);
+            });
+
+            // Kategori değişmişse, Marka ile ilgili işlemler bittiyse hemen ModelDegisti fonksiyonunu çağırıyoruz.
+            // İçine de MarkaId gönderiyoruz.
+            ModelDegisti(selectElement.value);
+        }
+    }
+
+
+
+    function ModelDegisti(selectedValue) {
+        var modeller = @Html.Raw(Json.Serialize(ViewBag.Modeller));
+
+        var filtrelenmisModeller = modeller.filter(function (model) {
+            return model.trademarkID == selectedValue;
+        });
+
+        var selectElements = document.getElementsByName("VersionID");
+
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+            selectElement.innerHTML = "";
+
+            filtrelenmisModeller.forEach(function (model) {
+                var optionElement = document.createElement("option");
+                optionElement.value = model.versionID;
+                optionElement.textContent = model.versionName;
+                selectElement.appendChild(optionElement);
+            });
+        }
+    }
+
+</script>
 
 @*datatable ı ajax ile dolduruyoruz*@
 <script>
@@ -121,6 +216,8 @@
                     }
                 },
                 { data: 'categoryID' },
+                { data: 'trademarkID' },
+                { data: 'versionID' },
                 {
                     data: null,
                     render: function (data, type, row) {
@@ -169,12 +266,41 @@
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                //GetProductById'den ggelen verileri inputlara dolduruyoruz
+                //GetProductById'den gelen verileri inputlara dolduruyoruz
                 $.each(response, function (key, value) {
                     var inputName = key.charAt(0).toUpperCase() + key.slice(1);
                     $('#updateForm input[name="' + inputName + '"]').val(value);
                     $('#updateForm textarea[name="' + inputName + '"]').val(value);
                 });
+
+                // KategoriID için select öğesini güncelle    bu kısmı chatgpt ye yazdırdım biraz zor, amacı güncelleye bastığımızda kategori marka ve modeli doldurmak :)
+                $('#updateForm select[name="CategoryID"]').val(response.categoryID);
+
+                // Markaları ve TrademarkID'yi güncelle
+                var markalar = @Html.Raw(Json.Serialize(ViewBag.Markalar));
+                var markalarFiltreli = markalar.filter(function (marka) {
+                    return marka.categoryID == response.categoryID;
+                });
+                var trademarkSelect = $('#updateForm select[name="TrademarkID"]');
+                trademarkSelect.empty();
+                $.each(markalarFiltreli, function (index, marka) {
+                    trademarkSelect.append('<option value="' + marka.trademarkID + '">' + marka.trademarkName + '</option>');
+                });
+                trademarkSelect.val(response.trademarkID);
+
+                // Modelleri ve VersionID'yi güncelle
+                var modeller = @Html.Raw(Json.Serialize(ViewBag.Modeller));
+                var modellerFiltreli = modeller.filter(function (model) {
+                    return model.trademarkID == response.trademarkID;
+                });
+                var versionSelect = $('#updateForm select[name="VersionID"]');
+                versionSelect.empty();
+                $.each(modellerFiltreli, function (index, model) {
+                    versionSelect.append('<option value="' + model.versionID + '">' + model.versionName + '</option>');
+                });
+                versionSelect.val(response.versionID);
+
+
                 // Güncelleme işlemi için form submit işlemi
                 $('#updateForm').off('submit').on('submit', function (e) {
                     e.preventDefault();

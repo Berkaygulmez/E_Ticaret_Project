@@ -26,15 +26,23 @@ namespace E_Ticaret_Project.Controllers
             HomeModel model = new HomeModel();
             model.Products = _baglanti.Products.ToList();
             model.Categories = _baglanti.Categories.ToList(); // Burada ürünlerin kategorilerini getirdik
+            model.Trademarks = _baglanti.Trademarks.ToList();
+            model.Version = _baglanti.Versions.ToList();
+
+            var sonEklenenSliderID = 0;
+            if (_baglanti.HomeSliders.Count() > 0) //içinde veri var mı diye bakıyorum çünküüüüü;
+            {
+                sonEklenenSliderID = _baglanti.HomeSliders.Max(y => y.SliderID); //Sen bunu müşteriye sattığında ilk kez veritabanı oluşturacak ve dolayısıyla içinde hiç veri olmayacak.
+                                                                                 //tabloda hiç veri yokken max aramaya çalışırsa hata verir
+                                                                                 //o yüzden eğer içinde veri varsa max çalışmalı veri yoksa yani 0 sa o zaman hiç çalışmasın burası sorun değil :)
+                var sonEklenenSlider = _baglanti.HomeSliders.Where(x => x.SliderID == sonEklenenSliderID).FirstOrDefault();
+
+                ViewBag.SliderImageName = sonEklenenSlider.SliderPhotoName;
 
 
-            var sonEklenenSliderID = _baglanti.HomeSliders.Max(y => y.SliderID);
-            var sonEklenenSlider = _baglanti.HomeSliders.Where(x => x.SliderID == sonEklenenSliderID).FirstOrDefault();
+                model.HomeSliders = _baglanti.HomeSliders.Where(x => x.SliderID != sonEklenenSliderID).ToList();
+            }
 
-            ViewBag.SliderImageName = sonEklenenSlider.SliderPhotoName;
-
-
-            model.HomeSliders=_baglanti.HomeSliders.Where(x=>x.SliderID != sonEklenenSliderID).ToList();
 
             return View(model);
         }

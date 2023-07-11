@@ -58,26 +58,6 @@ namespace E_Ticaret_Project.Migrations
                     b.ToTable("HomeSliders");
                 });
 
-            modelBuilder.Entity("E_Ticaret_Project.Models.Model", b =>
-                {
-                    b.Property<int>("ModelID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ModelName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TrademarkID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ModelID");
-
-                    b.HasIndex("TrademarkID");
-
-                    b.ToTable("Models");
-                });
-
             modelBuilder.Entity("E_Ticaret_Project.Models.Product", b =>
                 {
                     b.Property<int>("ProductID")
@@ -95,6 +75,12 @@ namespace E_Ticaret_Project.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrademarkID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VersionID")
                         .HasColumnType("int");
 
                     b.HasKey("ProductID");
@@ -154,15 +140,24 @@ namespace E_Ticaret_Project.Migrations
                     b.ToTable("Trademarks");
                 });
 
-            modelBuilder.Entity("E_Ticaret_Project.Models.Model", b =>
+            modelBuilder.Entity("E_Ticaret_Project.Models.Version", b =>
                 {
-                    b.HasOne("E_Ticaret_Project.Models.Trademark", "Trademark")
-                        .WithMany()
-                        .HasForeignKey("TrademarkID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("VersionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Navigation("Trademark");
+                    b.Property<int>("TrademarkID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VersionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VersionID");
+
+                    b.HasIndex("TrademarkID");
+
+                    b.ToTable("Versions");
                 });
 
             modelBuilder.Entity("E_Ticaret_Project.Models.Product", b =>
@@ -185,6 +180,17 @@ namespace E_Ticaret_Project.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("E_Ticaret_Project.Models.Version", b =>
+                {
+                    b.HasOne("E_Ticaret_Project.Models.Trademark", "Trademark")
+                        .WithMany()
+                        .HasForeignKey("TrademarkID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Trademark");
                 });
 #pragma warning restore 612, 618
         }

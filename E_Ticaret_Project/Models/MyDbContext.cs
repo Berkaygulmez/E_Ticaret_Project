@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Razor.Language.Intermediate;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_Ticaret_Project.Models
 {
@@ -13,6 +14,8 @@ namespace E_Ticaret_Project.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<HomeSlider> HomeSliders { get; set; }
 
-        public DbSet<Register> Registers { get; set; } 
+        public DbSet<Register> Registers { get; set; }
+        public DbSet<Trademark> Trademarks { get; set; }
+        public DbSet<Model> Models { get; set; }
     }
 }

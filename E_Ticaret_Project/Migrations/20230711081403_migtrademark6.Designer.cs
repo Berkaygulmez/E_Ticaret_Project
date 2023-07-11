@@ -4,14 +4,16 @@ using E_Ticaret_Project.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_Ticaret_Project.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230711081403_migtrademark6")]
+    partial class migtrademark6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,26 +58,6 @@ namespace E_Ticaret_Project.Migrations
                     b.HasKey("SliderID");
 
                     b.ToTable("HomeSliders");
-                });
-
-            modelBuilder.Entity("E_Ticaret_Project.Models.Model", b =>
-                {
-                    b.Property<int>("ModelID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ModelName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TrademarkID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ModelID");
-
-                    b.HasIndex("TrademarkID");
-
-                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("E_Ticaret_Project.Models.Product", b =>
@@ -152,17 +134,6 @@ namespace E_Ticaret_Project.Migrations
                     b.HasIndex("CategoryID");
 
                     b.ToTable("Trademarks");
-                });
-
-            modelBuilder.Entity("E_Ticaret_Project.Models.Model", b =>
-                {
-                    b.HasOne("E_Ticaret_Project.Models.Trademark", "Trademark")
-                        .WithMany()
-                        .HasForeignKey("TrademarkID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Trademark");
                 });
 
             modelBuilder.Entity("E_Ticaret_Project.Models.Product", b =>

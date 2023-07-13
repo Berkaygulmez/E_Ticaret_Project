@@ -52,7 +52,7 @@
                     <input type="text" name="VersionID" placeholder="Olması gereken ama gözükmeyen ID" class="form-control" style="display:none;">
                     <input type="text" name="VersionName" placeholder="Model Adı" class="form-control" required>
 
-                   <select class="form-control m-b" name="TrademarkID">
+                    <select class="form-control m-b" name="TrademarkID">
                         @foreach (var marka in ViewBag.Markalar)
                         {
                             <option value="@marka.TrademarkID">@marka.TrademarkName</option>
@@ -116,13 +116,18 @@
                 url: '/Admin/Version/VersionList',
                 type: 'GET',
                 dataType: 'json',
-                dataSrc: ''
+                dataSrc: function (data) {
+                    // İlgili dönüş verisindeki 'trademarkID' özelliğini 'trademarkName' olarak güncelleyin
+                    data.forEach(function (row) {
+                        row.trademarkName = row.trademarkName; // veya ilgili veriyi almak için gerekli değişiklikleri yapın
+                    });
+                    return data;
+                }
             },
             columns: [
                 { data: 'versionID' },
                 { data: 'versionName' },
-                { data: 'trademarkID' },
-
+                { data: 'trademarkName' },
                 {
                     data: null,
                     render: function (data, type, row) {

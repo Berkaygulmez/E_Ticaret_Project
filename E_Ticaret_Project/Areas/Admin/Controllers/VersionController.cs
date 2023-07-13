@@ -18,11 +18,10 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
         public IActionResult Version()
         {
             List<Category> kategoriler = _baglanti.Categories.Select(x => new Category { CategoryID = x.CategoryID, CategoryName = x.CategoryName }).ToList();
-
             ViewBag.Kategoriler = kategoriler;
-            // bu linq sorgusu ile marka tablosundan sadece marka ıd ve marka name'i çektiğimizi demeye çalışıyor.
-            List<Trademark> markalar = _baglanti.Trademarks.Select(x => new Trademark { TrademarkID = x.TrademarkID, TrademarkName = x.TrademarkName }).ToList();
 
+            // bu linq sorgusu ile marka tablosundan sadece marka ıd ve marka name'i çektiğimizi demeye çalışıyor.
+            List<Trademark> markalar = _baglanti.Trademarks.Select(x => new Trademark { TrademarkID = x.TrademarkID, TrademarkName = x.TrademarkName, CategoryID = x.CategoryID }).ToList();
             ViewBag.Markalar = markalar;
 
             return View();

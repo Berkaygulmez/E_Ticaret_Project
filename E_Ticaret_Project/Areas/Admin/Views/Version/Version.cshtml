@@ -14,17 +14,15 @@
                     <h3>Model Ekleme Sayfası</h3>
                 </div>
                 <div class="modal-body">
-                    <select class="form-control m-b" name="CategoryID">
+                    <select class="form-control m-b" name="CategoryID" onchange="KategoriDegisti(this.value)">
                         @foreach (var kategori in ViewBag.Kategoriler)
                         {
                             <option value="@kategori.CategoryID">@kategori.CategoryName</option>
                         }
                     </select>
+
                     <select class="form-control m-b" name="TrademarkID">
-                        @foreach (var marka in ViewBag.markalar)
-                        {
-                            <option value="@marka.TrademarkID">@marka.TrademarkName</option>
-                        }
+                        <option value=""></option>
                     </select>
 
 
@@ -50,15 +48,21 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" name="VersionID" placeholder="Olması gereken ama gözükmeyen ID" class="form-control" style="display:none;">
-                    <input type="text" name="VersionName" placeholder="Model Adı" class="form-control" required>
 
-                    <select class="form-control m-b" name="TrademarkID">
-                        @foreach (var marka in ViewBag.Markalar)
+                    <select class="form-control m-b" name="CategoryID" onchange="KategoriDegisti(this.value)">
+                        @foreach (var kategori in ViewBag.Kategoriler)
                         {
-                            <option value="@marka.TrademarkID">@marka.TrademarkName</option>
+                            <option value="@kategori.CategoryID">@kategori.CategoryName</option>
                         }
                     </select>
+
+                    <select class="form-control m-b" name="TrademarkID">
+                        <option value=""></option>
+                    </select>
+
+                    <input type="text" name="VersionName" placeholder="Model Adı" class="form-control" required>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Modeli Güncelle</button>
                     <button type="button" class="btn btn-white" data-dismiss="modal">Kapat</button>
@@ -101,6 +105,41 @@
 
 @section Scripts
  {
+<script>
+
+    //sayfa ilk açıldığında bir kerelik bu function çalışsın ki select öğeleri boş kalmasın
+    window.onload = function () {
+        KategoriDegisti(document.getElementsByName("CategoryID")[0].value);
+    };
+
+    function KategoriDegisti(selectedValue) {
+        // ViewBag.Markalar içinde veritabanındaki tüm kategorileri aldık
+        var markalar = @Html.Raw(Json.Serialize(ViewBag.Markalar));
+
+        // Bize sadece kategorinin markaları lazım, bu yüzden bir filtre uyguladık.
+        // Örneğin, telefon seçildiğinde sadece Apple ve Samsung markaları gelecek.
+        var filtrelenmisMarkalar = markalar.filter(function (marka) {
+            return marka.categoryID == selectedValue;
+        });
+
+        // TrademarkID isimli select öğesini aldık
+        var selectElements = document.getElementsByName("TrademarkID");
+
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+            selectElement.innerHTML = ""; // İçinde bir şeyler varsa sildik ki karışıklık oluşmasın
+
+            // Burada bize lazım olan markaların bulunduğu diziyi TrademarkID isimli select öğesine ekledik
+            filtrelenmisMarkalar.forEach(function (marka) {
+                var optionElement = document.createElement("option");
+                optionElement.value = marka.trademarkID;
+                optionElement.textContent = marka.trademarkName;
+                selectElement.appendChild(optionElement);
+            });
+        }
+    }
+</script>
+
 
 @*datatable ı ajax ile dolduruyoruz*@
 <script>

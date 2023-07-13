@@ -29,8 +29,16 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult TrademarkList()
         {
-            var TrademarkList = _baglanti.Trademarks.ToList(); //normal verileri çektim
-            return Json(TrademarkList); //json formatında gönderdim
+
+            var modelList = _baglanti.Trademarks.Join(_baglanti.Categories, Trademark => Trademark.CategoryID, Category => Category.CategoryID, (Trademark, Category) => new
+            {
+                Trademark.TrademarkID,
+                Trademark.TrademarkName,
+                CategoryName = Category.CategoryName
+            }).ToList(); //normal verileri çektim
+
+            //var TrademarkList = _baglanti.Trademarks.ToList(); //normal verileri çektim
+            return Json(modelList); //json formatında gönderdim
         }
 
         [HttpGet]

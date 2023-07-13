@@ -110,12 +110,18 @@
                 url: '/Admin/Trademark/TrademarkList',
                 type: 'GET',
                 dataType: 'json',
-                dataSrc: ''
+                dataSrc: function (data) {
+                    // İlgili dönüş verisindeki 'trademarkID' özelliğini 'trademarkName' olarak güncelleyin
+                    data.forEach(function (row) {
+                        row.trademarkName = row.trademarkName; // veya ilgili veriyi almak için gerekli değişiklikleri yapın
+                    });
+                    return data;
+                }
             },
             columns: [
                 { data: 'trademarkID' },
                 { data: 'trademarkName' },
-                { data: 'categoryID' },
+                { data: 'categoryName' },
               
                 {
                     data: null,

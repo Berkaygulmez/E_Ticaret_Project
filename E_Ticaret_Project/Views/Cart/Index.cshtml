@@ -1,0 +1,164 @@
+﻿@model List<Cart>
+@*<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | E-commerce</title>
+
+    <link href="~/Admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Admin/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="~/Admin/css/animate.css" rel="stylesheet">
+    <link href="~/Admin/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>*@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-9">
+
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="float-right">(<strong>1</strong>) Ürün</span>
+                    <h5>Sepette ki ürünler</h5>
+                </div>
+                <div class="ibox-content">
+
+
+                    <div class="table-responsive">
+                        <table class="table shoping-cart-table">
+                            @foreach (var cart in Model)
+                            {
+
+                                <tbody>
+                                    <tr>
+                                        <td width="90">
+                                            <div class="cart-product-imitation">
+                                            </div>
+                                        </td>
+                                        <td class="desc">
+                                            <h3>
+                                                <a href="#" class="text-navy">
+                                                   Ürün Adı
+                                                </a>
+                                            </h3>
+                                            <p class="small">
+                                                Ürün Açıklaması
+                                            </p>
+                                            <dl class="small m-b-none">
+                                                <dt>Description lists</dt>
+                                                <dd>A description list is perfect for defining terms.</dd>
+                                            </dl>
+
+                                            <div class="m-t-sm">
+                                                <a href="#" class="text-muted"><i class="fa fa-trash"></i> Ürünü iptal et</a>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            $180,00
+                                            <s class="small text-muted">$230,00</s>
+                                        </td>
+                                        <td width="65">
+                                            <input type="text" class="form-control" placeholder="1">
+                                        </td>
+                                        <td>
+                                            <h4>
+                                                Ürün fiyatı
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+
+                </div>
+                <div class="ibox-content">
+
+                    <button class="btn btn-white"><i class="fa fa-arrow-left"></i> Alışverişe Dön</button>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Sepet Tutarı</h5>
+                </div>
+                <div class="ibox-content">
+                    <span>
+                        Toplam
+                    </span>
+                    <h2 class="font-bold">
+                        x ₺
+                    </h2>
+
+                    <hr />
+                    <span class="text-muted small">
+                        *For United States, France and Germany applicable sales tax will be applied
+                    </span>
+                    <div class="m-t-sm">
+                        <div>
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Siparişi Tamamla</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="ibox">
+        </div>
+    </div>
+</div>
+@*</div> bunlara gerek yok geçen de anlattım
+
+
+
+    <!-- Mainly scripts -->
+    <script src="~/Admin/js/jquery-3.1.1.min.js"></script>
+    <script src="~/Admin/js/popper.min.js"></script>
+    <script src="~/Admin/js/bootstrap.js"></script>
+    <script src="~/Admin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Admin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="~/Admin/js/inspinia.js"></script>
+    <script src="~/Admin/js/plugins/pace/pace.min.js"></script>*@
+
+<script>
+    // Bu kodu, "Satın Al" butonuna tıkladığınızda çalıştırabilirsiniz
+    function addToCart() {
+        var productId = 1; // Sepete ekleyeceğiniz ürünün ID'sini buraya yazın
+        var quantity = 1; // Ürün adedini buraya yazın
+
+        // Ajax isteği gönderme
+        $.ajax({
+            url: '/api/Cart/AddToCart',
+            type: 'POST',
+            data: { productId: productId, quantity: quantity },
+            success: function (response) {
+                // Toast mesajını gösterme
+                toastr.success(response.message, 'Başarılı');
+            },
+            error: function (response) {
+                toastr.error(response.responseJSON.message, 'Hata');
+            }
+        });
+    }
+</script>
+
+
+@*</body>*@
+
+@*</html>*@

@@ -1,5 +1,8 @@
-﻿using E_Ticaret_Project.Models;
+﻿using E_Ticaret_Project.Migrations;
+using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace E_Ticaret_Project.Controllers
@@ -30,5 +33,7 @@ namespace E_Ticaret_Project.Controllers
             return View(product);
             
         }
+        
     }
+    
 }

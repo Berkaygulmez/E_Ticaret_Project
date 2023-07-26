@@ -17,5 +17,6 @@ namespace E_Ticaret_Project.Models
         public DbSet<Register> Registers { get; set; }
         public DbSet<Trademark> Trademarks { get; set; }
         public DbSet<Version> Versions { get; set; }
+        public DbSet<Cart> Carts { get; set; }
     }
 }

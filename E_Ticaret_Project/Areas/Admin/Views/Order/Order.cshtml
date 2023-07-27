@@ -1,4 +1,4 @@
-﻿@model List<Order>
+﻿@model List<OrderDetailsDto>
 <!-- Varsayalım "Order" sınıfınız veritabanındaki "Orders" tablosuna karşılık geliyor -->
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -26,8 +26,8 @@
                                 {
                                     <tr>
                                         <td>@order.OrderID</td>
-                                        <td>@order.RegisterID</td>
-                                        <td>@order.ProductID</td>
+                                        <td>@order.NameSurname</td>
+                                        <td>@order.ProductName</td>
                                         <td>@order.Piece</td>
                                        @* <td class="text-right">
                                             <div class="btn-group">

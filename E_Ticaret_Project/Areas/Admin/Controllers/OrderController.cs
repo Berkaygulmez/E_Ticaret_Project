@@ -1,4 +1,5 @@
-﻿using E_Ticaret_Project.Models;
+﻿using E_Ticaret_Project.Areas.Admin.Models;
+using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
@@ -28,13 +29,29 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
             List<Register> register = _baglanti.Registers.Select(x => new Register { RegisterID = x.RegisterID, NameSurname = x.NameSurname }).ToList();
             ViewBag.registers = register;
 
-            var orderList = _baglanti.Orders.ToList();
-            return View(orderList);
+            List<OrderDetailsDto> odd = _baglanti.Orders
+      .Join(_baglanti.Products,
+          order => order.ProductID,
+          product => product.ProductID,
+          (order, product) => new { order, product })
+      .Join(_baglanti.Registers,
+          or => or.order.RegisterID,
+          register => register.RegisterID,
+          (or, registers) => new OrderDetailsDto
+          {
+              OrderID = or.order.OrderID,
+              ProductName = or.product.ProductName,
+              NameSurname = registers.NameSurname,
+              Piece=or.order.Piece
+          })
+      .ToList();
+
+            return View(odd);
         }
+
+
      //   public IActionResult OrderList()
      //   {
-
-
      //       var orderList = _baglanti.Orders
      //.Join(_baglanti.Products,
      //    order => order.ProductID,
@@ -51,10 +68,10 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
      //    })
      //.ToList();
 
-     //       return View(orderList);
+            //       return View(orderList);
 
-     //   }
+            //   }
 
 
-    }
+        }
 }

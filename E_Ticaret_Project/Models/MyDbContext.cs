@@ -13,10 +13,10 @@ namespace E_Ticaret_Project.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<HomeSlider> HomeSliders { get; set; }
-
         public DbSet<Register> Registers { get; set; }
         public DbSet<Trademark> Trademarks { get; set; }
         public DbSet<Version> Versions { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

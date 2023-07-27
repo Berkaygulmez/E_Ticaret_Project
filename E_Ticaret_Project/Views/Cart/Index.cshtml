@@ -109,9 +109,12 @@
                     </span>
                     <div class="m-t-sm">
                         <div>
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Siparişi Tamamla</a>
+                            <form action="@Url.Action("CompleteOrder", "Order")" method="post">
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Siparişi Tamamla</button>
+                            </form>
                         </div>
                     </div>
+
 
                 </div>
             </div>

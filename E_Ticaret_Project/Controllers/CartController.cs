@@ -17,7 +17,7 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult Index()
         {
-            var cartsWithProducts = _baglanti.Carts.Include(cart => cart.ProductID).ToList();
+            var cartsWithProducts = _baglanti.Carts.Include(cart => cart.Product).ToList();
             int userId = 8;
 
             return View(cartsWithProducts);

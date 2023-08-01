@@ -1,6 +1,7 @@
 ﻿using E_Ticaret_Project.Models;
 using E_Ticaret_Project.ViewComponents;
 using E_Ticaret_Project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace E_Ticaret_Project.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

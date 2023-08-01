@@ -1,10 +1,12 @@
 ﻿using E_Ticaret_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace E_Ticaret_Project.Controllers
 {
+    [AllowAnonymous]
     public class ProductListController : Controller
     {
         private readonly MyDbContext _baglanti;

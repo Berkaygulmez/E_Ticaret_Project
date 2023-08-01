@@ -1,24 +1,4 @@
 ﻿@model List<Cart>
-@*<!DOCTYPE html>
-<html>
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>INSPINIA | E-commerce</title>
-
-    <link href="~/Admin/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/Admin/font-awesome/css/font-awesome.css" rel="stylesheet">
-
-    <link href="~/Admin/css/animate.css" rel="stylesheet">
-    <link href="~/Admin/css/style.css" rel="stylesheet">
-
-
-</head>
-
-<body>*@
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -46,11 +26,11 @@
                                         <td class="desc">
                                             <h3>
                                                 <a href="#" class="text-navy">
-                                                   Ürün Adı
+                                                  @cart.Product.ProductName
                                                 </a>
                                             </h3>
                                             <p class="small">
-                                                Ürün Açıklaması
+                                                @cart.Product.ProductDescription
                                             </p>
                                             <dl class="small m-b-none">
                                                 <dt>Description lists</dt>
@@ -63,15 +43,14 @@
                                         </td>
 
                                         <td>
-                                            $180,00
-                                            <s class="small text-muted">$230,00</s>
+                                            @cart.Product.ProductPrice
                                         </td>
                                         <td width="65">
                                             <input type="text" class="form-control" placeholder="1">
                                         </td>
                                         <td>
                                             <h4>
-                                                Ürün fiyatı
+                                                @cart.Product.ProductPrice
                                             </h4>
                                         </td>
                                     </tr>
@@ -124,20 +103,7 @@
         </div>
     </div>
 </div>
-@*</div> bunlara gerek yok geçen de anlattım
 
-
-
-    <!-- Mainly scripts -->
-    <script src="~/Admin/js/jquery-3.1.1.min.js"></script>
-    <script src="~/Admin/js/popper.min.js"></script>
-    <script src="~/Admin/js/bootstrap.js"></script>
-    <script src="~/Admin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="~/Admin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-    <!-- Custom and plugin javascript -->
-    <script src="~/Admin/js/inspinia.js"></script>
-    <script src="~/Admin/js/plugins/pace/pace.min.js"></script>*@
 
 <script>
     // Bu kodu, "Satın Al" butonuna tıkladığınızda çalıştırabilirsiniz
@@ -160,8 +126,3 @@
         });
     }
 </script>
-
-
-@*</body>*@
-
-@*</html>*@

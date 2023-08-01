@@ -1,11 +1,18 @@
 ﻿using E_Ticaret_Project.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace E_Ticaret_Project.Controllers
 {
+    [AllowAnonymous]
     public class LogInController : Controller
     {
         private readonly MyDbContext _baglanti;
@@ -20,9 +27,10 @@ namespace E_Ticaret_Project.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(Register register) //buraya niye farklı bişeyler yazdın ki?
+        public async Task<IActionResult> Index(Register register)
         {
             var user = _baglanti.Registers.FirstOrDefault(u => u.UserName == register.UserName); // bağlanı üzerinden register tablosundaki USERNAME'den verileri çeken LINQ sorgusu
+
             if (user != null)
             {
                 if (user.LockoutEnd != null && user.LockoutEnd > DateTime.Now) //eğer kilit süresi şuandan uzunsa ve null değilse hesap kilitlendi uyarı mesajı verir
@@ -41,9 +49,16 @@ namespace E_Ticaret_Project.Controllers
                         _baglanti.SaveChanges();
                     }
 
+
+                    var claims = new List<Claim>                        // claimler ile Otantike oldundu
+                    { new Claim(ClaimTypes.Name,"şimdilikfaketmez")};
+                    var useridentity = new ClaimsIdentity(claims, "a");
+                    ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
+                    await HttpContext.SignInAsync(principal);
+
                     return RedirectToAction("Index", "Home");
                 }
-                else   // gelen şifreyle tabloda ki şifre aynıysa değilse çalışır.
+                else   // gelen şifreyle tabloda ki şifre aynı değilse çalışır.
                 {
                     user.AccessFailedCount++; // deneme hakkını artırır ve 
 
@@ -54,7 +69,7 @@ namespace E_Ticaret_Project.Controllers
 
                     _baglanti.SaveChanges();
 
-                    ModelState.AddModelError("", "Kullanıcı adı veya şifre yanlış."); 
+                    ModelState.AddModelError("", "Kullanıcı adı veya şifre yanlış.");
                     TempData["ErrorMessage"] = "Kullanıcı adı veya şifre yanlış.";
                     return View();
                 }
@@ -63,6 +78,17 @@ namespace E_Ticaret_Project.Controllers
             TempData["ErrorMessage"] = "Kullanıcı adı veya şifre yanlış.";
             return View();
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            //Çıkış Yap
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+
+        }
+
     }
 }
 

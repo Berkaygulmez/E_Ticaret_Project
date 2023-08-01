@@ -23,18 +23,24 @@ namespace E_Ticaret_Project.Controllers
             return View(cartsWithProducts);
         }
 
+        public IActionResult CartPay()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult AddToCart(int id, int quantity = 1)
         {
             try
             {
-                
-                Cart cart = new Cart { RegisterID = 8, ProductID = id, Piece = quantity }; 
-               _baglanti.Carts.Add(cart);
 
+                Cart cart = new Cart { RegisterID = 8, ProductID = id, Piece = quantity };
+                _baglanti.Carts.Add(cart);
                 _baglanti.SaveChanges();
 
-                return Ok(new { message = "Ürün sepete eklendi." });
+                TempData["SuccessMessage"] = "Ürün sepete eklendi.";
+
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {

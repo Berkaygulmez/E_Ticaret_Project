@@ -3,65 +3,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <style>
-        body {
-            text-align: center;
-        }
-
-        .breadcrumb {
-            display: inline-block;
-            text-align: center;
-        }
-
-        .breadcrumb-item {
-            display: inline-block;
-            text-align: left;
-        }
-
-            .breadcrumb-item:not(:last-child)::after {
-
-                padding: 0 5px;
-            }
-    </style>
-</head>
-
-
-<body>
-    <h2>Sipariş Ödeme Sayfası</h2>
-    <div class="col-md-12">
-        <ol>
-            <li class="breadcrumb-item">
-                <a href="/Home/Index">Satın Al</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/Cart/Index">Sepetim</a>
-            </li>
-            <li class="breadcrumb-item active">
-                <strong>ÖDEME</strong>
-            </li>
-        </ol>
-    </div>
-</body>
-</html>
-
-
 
 <div class="wrapper wrapper-content animated fadeInRight">
-
-
-
-
     <div class="row">
-
-        <div class="col-lg-12">
-
+        <div class="col-lg-8 offset-2">
             <div class="ibox">
-
                 <div class="ibox-content">
+
+                    <h2>Sipariş Ödeme Sayfası</h2>
+                    <div class="col-md-12">
+                        <ol>
+                            <li class="breadcrumb-item">
+                                <a href="/Home/Index">Satın Al</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/Cart/Index">Sepetim</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <strong>ÖDEME</strong>
+                            </li>
+                        </ol>
+                    </div>
 
                     <div class="panel-group payments-method" id="accordion">
                         <div class="panel panel-default">
@@ -82,14 +44,14 @@
                                         <div class="col-md-12">
                                             <div class="payment-card">
                                                 <i class="fa fa-cc-mastercard payment-icon-big text-warning"></i>
-                                              
+
                                                 <h2 id="outcardno">**** **** **** ****</h2>
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <h4>İSİM :</h4>  <h5 id="outname"></h5>
                                                     </div>
                                                     <div class="col-sm-3 text-center">
-                                                      <h4>SKT :</h4>  <h5 id="outdate"></h5>
+                                                        <h4>SKT :</h4>  <h5 id="outdate"></h5>
                                                     </div>
                                                     <div class="col-sm-3 text-right">
                                                         <h4>CVC :</h4>  <h5 id="outcvc"></h5>
@@ -107,8 +69,7 @@
                                                     <div class="form-group">
                                                         <label>Kart Numarası</label>
                                                         <div class="input-group">
-                                                           
-                                                            <input type="text" id="cardno" maxlength="16" oninput="formatCardNo()" class="form-control" name="Number" placeholder="KART NUMARASI" required />
+                                                            <input type="text" id="cardno" maxlength="16" onkeydown="formatCardNo()" data-mask="9999 9999 9999 9999" class="form-control" name="Number" placeholder="KART NUMARASI" required />
                                                             <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                                         </div>
                                                     </div>
@@ -118,13 +79,13 @@
                                                 <div class="col-7 col-md-7">
                                                     <div class="form-group">
                                                         <label>Son Kullanım Tarihi</label>
-                                                        <input type="text" id="date" maxlength="4" oninput="formatDate()" class="form-control" name="Expiry" placeholder="AY / YIL" required />
+                                                        <input type="text" id="date" maxlength="4" onkeydown="formatDate()" class="form-control" data-mask="99/99" name="Expiry" placeholder="AY / YIL" required />
                                                     </div>
                                                 </div>
                                                 <div class="col-5 col-md-5 float-right">
                                                     <div class="form-group">
                                                         <label>CVC KODU</label>
-                                                        <input type="text" id="cvc" maxlength="3" oninput="formatCVC()" class="form-control" name="CVC" placeholder="CVC" required />
+                                                        <input type="text" id="cvc" maxlength="3" onkeydown="formatCVC()" class="form-control" name="CVC" placeholder="CVC" required />
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,23 +108,35 @@
 
                                 </div>
 
-
-
-
-
-
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
+
+
+<style>
+    body {
+        text-align: center;
+    }
+
+    .breadcrumb {
+        display: inline-block;
+        text-align: center;
+    }
+
+    .breadcrumb-item {
+        display: inline-block;
+        text-align: left;
+    }
+
+        .breadcrumb-item:not(:last-child)::after {
+            padding: 0 5px;
+        }
+</style>
 
 <script>
     function formatName() {
@@ -177,24 +150,24 @@
     }
 </script>
 
- <script>
-        function formatDate() {
-            var dateInput = document.getElementById("date");
-            var date = dateInput.value;
-            var formattedDate = "";
+<script>
+    function formatDate() {
+        var dateInput = document.getElementById("date");
+        var date = dateInput.value;
+        var formattedDate = "";
 
-            // Rakamları ve "/" karakterini filtrele
-            var digits = date.replace(/\D/g, "");
+        // Rakamları ve "/" karakterini filtrele
+        var digits = date.replace(/\D/g, "");
 
-            if (digits.length > 2) {
-                formattedDate = digits.substr(0, 2) + " / " + digits.substr(2);
-            } else {
-                formattedDate = digits;
-            }
+        if (digits.length > 2) {
+            formattedDate = digits.substr(0, 2) + " / " + digits.substr(2);
+        } else {
+            formattedDate = digits;
+        }
 
         document.getElementById("outdate").textContent = formattedDate;
-        }
-    </script>
+    }
+</script>
 
 <script>
     function formatCardNo() {
@@ -214,3 +187,4 @@
         document.getElementById("outcardno").textContent = formattedCardNo;
     }
 </script>
+

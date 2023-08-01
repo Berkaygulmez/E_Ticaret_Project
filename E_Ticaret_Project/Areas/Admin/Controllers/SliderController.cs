@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using E_Ticaret_Project.Helpers;
 
 namespace E_Ticaret_Project.Areas.Admin.Controllers
 {
@@ -43,21 +44,13 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
         {
             if (sliderPhoto != null && sliderPhoto.Length > 0)
             {
-                // Fotoğrafı yüklemek için benzersiz bir dosya adı oluşturun
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + sliderPhoto.FileName;
 
-                // Fotoğrafı kaydetmek için hedef dosya yolunu oluşturun
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Image/SliderImage");
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                // Dosyayı diskte kaydedin
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    sliderPhoto.CopyTo(fileStream);
-                }
+                ImageSaveMethod ısm = new ImageSaveMethod(_webHostEnvironment);
+                string fotografAdi = ısm.FotografEkle(sliderPhoto, "Image/SliderImage");
 
                 // Veritabanına kaydetme işlemi
-                homeSlider.SliderPhotoName = uniqueFileName;
+                homeSlider.SliderPhotoName = fotografAdi;
 
                 _baglanti.HomeSliders.Add(homeSlider);
                 _baglanti.SaveChanges();

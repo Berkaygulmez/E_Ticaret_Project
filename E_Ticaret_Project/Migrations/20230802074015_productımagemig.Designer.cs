@@ -4,14 +4,16 @@ using E_Ticaret_Project.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_Ticaret_Project.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230802074015_productımagemig")]
+    partial class productımagemig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,15 +149,15 @@ namespace E_Ticaret_Project.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProductImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RegisterID")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductImageID");
 
-                    b.HasIndex("ProductID");
+                    b.HasIndex("RegisterID");
 
                     b.ToTable("ProductImages");
                 });
@@ -281,13 +283,13 @@ namespace E_Ticaret_Project.Migrations
 
             modelBuilder.Entity("E_Ticaret_Project.Models.ProductImage", b =>
                 {
-                    b.HasOne("E_Ticaret_Project.Models.Product", "product")
+                    b.HasOne("E_Ticaret_Project.Models.Register", "register")
                         .WithMany()
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("RegisterID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("product");
+                    b.Navigation("register");
                 });
 
             modelBuilder.Entity("E_Ticaret_Project.Models.Trademark", b =>

@@ -31,6 +31,11 @@ namespace E_Ticaret_Project.Controllers
             model.Trademarks = _baglanti.Trademarks.ToList();
             model.Version = _baglanti.Versions.ToList();
 
+
+            //daha güzel yöntemler vardır ama bende çok iyi bilmiyorum şimdi gidip productımage tablosunu komple çekicez
+            model.ProductImages = _baglanti.ProductImages.ToList();
+
+
             var sonEklenenSliderID = 0;
             if (_baglanti.HomeSliders.Count() > 0) //içinde veri var mı diye bakıyorum çünküüüüü;
             {

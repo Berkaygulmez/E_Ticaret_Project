@@ -1,5 +1,6 @@
 ﻿using E_Ticaret_Project.Migrations;
 using E_Ticaret_Project.Models;
+using E_Ticaret_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,10 +19,15 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult Index(int id)
         {
-            Product product = new Product(); //newledik
-
             // ID'yi kullanarak ilgili ürünü veritabanından çekmek
-            product = _baglanti.Products.Where(p => p.ProductID == id).FirstOrDefault();
+          
+            var product = new ProductandProductImage
+            {
+                //Gelen ürünün "Product" özelliği ürün bilgilerini içerirken, "ProductImages" liste özelliği o ürüne ait görsellerin listesini içerecektir.
+                Product = _baglanti.Products.FirstOrDefault(p => p.ProductID == id), 
+                ProductImages = _baglanti.ProductImages.Where(pi => pi.ProductID == id).ToList() 
+            };
+
 
             if (product == null)
             {
@@ -31,9 +37,9 @@ namespace E_Ticaret_Project.Controllers
 
             // Ürün bilgilerini Model'e ekleyerek view'e geçiş yapma
             return View(product);
-            
+
         }
-        
+
     }
-    
+
 }

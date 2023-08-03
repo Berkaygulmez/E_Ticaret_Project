@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ProductandProductImage
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,21 +16,25 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="product-images">
-                            <div>
-                                <div class="image-imitation">
-                                    [IMAGE 1]
+                            @if (Model.ProductImages != null)
+                            {
+                                foreach (var item in Model.ProductImages) 
+                                {
+                                    <div>
+                                        <div class="image-imitation pt-1 pb-1">
+                                            <img class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
+                                         src="~/Image/ProductImage/@item.ProductImageUrl" alt="Resim Açıklaması">
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="product-imitation">
+                                    [ Resim Bulunamadı. ]
                                 </div>
-                            </div>
-                            <div>
-                                <div class="image-imitation">
-                                    [IMAGE 12]
-                                </div>
-                            </div>
-                            <div>
-                                <div class="image-imitation">
-                                    [IMAGE 123]
-                                </div>
-                            </div>
+                            }
+                         
                         </div>
 
                     </div>
@@ -38,12 +42,12 @@
                     <div class="col-md-7">
 
                         <h1 class="font-bold m-b-xs">
-                            <strong>@Model.ProductName</strong>
+                            <strong>@Model.Product.ProductName</strong>
                         </h1>
                        
                         <hr>
                         <div>
-                            <form action="/Cart/AddToCart/@Model.ProductID" method="post"> @*Burda productID yide gönderelim ki hangi ürünü sepete eklediğimizi bilelim*@
+                            <form action="/Cart/AddToCart/@Model.Product.ProductID" method="post"> @*Burda productID yide gönderelim ki hangi ürünü sepete eklediğimizi bilelim*@
                                 <button type="submit" class="btn btn-primary btn-lg float-right">
                                     <i class="fa fa-shopping-cart"></i> Sepete Ekle
                                 </button>
@@ -51,13 +55,13 @@
 
 
 
-                            <h1 class="product-main-price">@Model.ProductPrice ₺ </h1>
+                            <h1 class="product-main-price">@Model.Product.ProductPrice ₺ </h1>
                         </div>
                         <hr>
                         <h2>Ürün Açıklaması</h2>
 
                         <h3 class="text-muted">
-                            @Model.ProductDescription
+                            @Model.Product.ProductDescription
                         </h3>
                         <div class="text-right">
                             <div class="btn-group">

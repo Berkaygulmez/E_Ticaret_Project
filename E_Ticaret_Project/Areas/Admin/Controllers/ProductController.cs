@@ -1,5 +1,8 @@
 ﻿//using E_Ticaret_Project.Migrations;
+using E_Ticaret_Project.Helpers;
 using E_Ticaret_Project.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,10 +14,12 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly MyDbContext _baglanti;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(MyDbContext context)
+        public ProductController(MyDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _baglanti = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Product()
@@ -33,7 +38,7 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
             List<E_Ticaret_Project.Models.Version> modeller = _baglanti.Versions.Select(x => new E_Ticaret_Project.Models.Version { VersionID = x.VersionID, VersionName = x.VersionName, TrademarkID = x.TrademarkID }).ToList();
             ViewBag.Modeller = modeller;
 
-            return View();  
+            return View();
         }
 
         //Bu methodda Product sayfasındaki datatable veri gönderiyoruz, return olarak json gönderiyoruz
@@ -102,6 +107,35 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
             _baglanti.SaveChanges();
 
             return Json(new { success = true });
+        }
+
+        //hiçbir şey yazmazsan zaten get demektir
+        public IActionResult AddProductImage(int id)
+        {
+            ViewBag.UrunID = id;
+
+            var products = _baglanti.ProductImages.Where(p => p.ProductID == id).ToList(); //şimdi yüklenen fotoğraflar o üründe gözüksün ana sayfada. daha sonrada fotoğraf sil güncelle felanda yapabilirsin. tamam uğraşıyim bbbai
+
+            return View(products);
+        }
+
+        [HttpPost] // bu sadece addProductImage post olduğu zaman çalışır olay bu kadar :)
+        public IActionResult AddProductImage(int id, ProductImage ProductImage, IFormFile ProductImageUrl)
+        {
+            if (ProductImageUrl != null && ProductImageUrl.Length > 0)
+            {
+                ImageSaveMethod ısm = new ImageSaveMethod(_webHostEnvironment);
+                string fotografUrl = ısm.FotografEkle(ProductImageUrl, "Image/ProductImage");
+
+                // Veritabanına kaydetme işlemi
+                ProductImage.ProductID = id; //bunu yazmayı unutmuşsun dene şimdi çalışır
+                ProductImage.ProductImageUrl = fotografUrl;
+
+                _baglanti.ProductImages.Add(ProductImage);
+                _baglanti.SaveChanges();
+            }     
+            //verileri burada yani post işlemi yaparken gönderiyordun bu doğru değil
+            return View(); 
         }
 
     }

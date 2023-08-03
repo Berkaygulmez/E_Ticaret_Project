@@ -1,6 +1,8 @@
 ﻿using E_Ticaret_Project.Models;
+using E_Ticaret_Project.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,17 +20,13 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult ProductList(int id) //tamam id dedik şimdi çalışır dene
         {
-            var kategoriİsimleri = _baglanti.Categories.ToList(); //sebebini hala net çözemedim ama bu şekilde yapılıyor :)
+            var productsWithImagesAndCategory = _baglanti.Products
+         .Where(p => p.CategoryID == id)
+         .Include(p => p.ProductImage)
+         .Include(p => p.Category)
+         .ToList();
 
-            var products = _baglanti.Products.Where(p => p.CategoryID == id).ToList();
-
-            //if (products.Count() == 0) //güzel oldu ama ürün bulamayınca öyle yapmasın 
-            //{
-            //    // Ürün bulunamadıysa, hata mesajı gösterebilir veya başka bir işlem yapabilirsiniz
-            //    return NotFound("Ürün bulunamadı.");
-            //}
-
-            return View(products);
+            return View(productsWithImagesAndCategory);
         }
         //public List<Product> GetProductsByCategoryId(int categoryId)
         //{

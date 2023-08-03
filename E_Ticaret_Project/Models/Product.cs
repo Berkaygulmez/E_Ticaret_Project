@@ -10,5 +10,6 @@
         public Category Category { get; set; }
         public int TrademarkID { get; set; }
         public int VersionID { get; set; }
+        public ProductImage ProductImage { get; set; }
     }
 }

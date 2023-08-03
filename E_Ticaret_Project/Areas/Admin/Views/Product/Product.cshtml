@@ -198,7 +198,7 @@
                 url: '/Admin/Product/ProductList',
                 type: 'GET',
                 dataType: 'json',
-                dataSrc:''
+                dataSrc: ''
             },
             columns: [
                 { data: 'productID' },
@@ -221,7 +221,9 @@
                     data: null,
                     render: function (data, type, row) {
                         return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#updateModal" onclick="UrunGuncelle(' + data.productID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
-                            '<button class="btn btn-danger mr-2" type="button" onclick="UrunSil(' + data.productID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
+                            '<button class="btn btn-danger mr-2" type="button" onclick="UrunSil(' + data.productID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>' +
+                            '<button class="btn btn-primary mr-2" onclick="FotoEkle(' + data.productID + ')"><i class="fa fa-camera pr-1"></i>Fotoğraf Ekle</button>';
+
                     }
                 }
             ]
@@ -353,5 +355,10 @@
     }
 
 </script>
+
+<script>
+    function FotoEkle(productID) {
+        window.location.href = '/Admin/Product/AddProductImage/' + productID;
+    }</script>
 
 }

@@ -18,5 +18,6 @@ namespace E_Ticaret_Project.Models
         public DbSet<Version> Versions { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
     }
 }

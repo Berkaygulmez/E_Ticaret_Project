@@ -12,6 +12,7 @@ namespace E_Ticaret_Project.ViewModels
 
         public List<Version> Version { get; set; }
         public List<HomeSlider> HomeSliders { get; set; }
+        public List<ProductImage> ProductImages { get; set; }
 
     }
 }

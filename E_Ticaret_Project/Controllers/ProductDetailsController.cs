@@ -25,7 +25,7 @@ namespace E_Ticaret_Project.Controllers
             {
                 //Gelen ürünün "Product" özelliği ürün bilgilerini içerirken, "ProductImages" liste özelliği o ürüne ait görsellerin listesini içerecektir.
                 Product = _baglanti.Products.FirstOrDefault(p => p.ProductID == id), 
-                ProductImages = _baglanti.ProductImages.Where(pi => pi.ProductID == id).ToList() 
+                ProductImageList = _baglanti.ProductImages.Where(pi => pi.ProductID == id).ToList() 
             };
 
 

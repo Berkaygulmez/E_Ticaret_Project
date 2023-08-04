@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link href="~/Admin/css/plugins/slick/slick.css" rel="stylesheet">
-<link href="~/Admin/css/plugins/slick/slick-theme.css" rel="stylesheet">
 
 <div class="row">
     <div class="col-lg-12">
@@ -16,9 +14,9 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="product-images">
-                            @if (Model.ProductImages != null)
+                            @if (Model.ProductImageList != null && Model.ProductImageList.Any())
                             {
-                                foreach (var item in Model.ProductImages) 
+                                foreach (var item in Model.ProductImageList) 
                                 {
                                     <div>
                                         <div class="image-imitation pt-1 pb-1">
@@ -55,7 +53,9 @@
 
 
 
-                            <h1 class="product-main-price">@Model.Product.ProductPrice ₺ </h1>
+                            <h1 class="product-main-price">
+                                @Model.Product.ProductPrice.ToString("N0") ₺
+                            </h1>
                         </div>
                         <hr>
                         <h2>Ürün Açıklaması</h2>

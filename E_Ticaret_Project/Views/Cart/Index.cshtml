@@ -32,10 +32,6 @@
                                             <p class="small">
                                                 @cart.Product.ProductDescription
                                             </p>
-                                            <dl class="small m-b-none">
-                                                <dt>Description lists</dt>
-                                                <dd>A description list is perfect for defining terms.</dd>
-                                            </dl>
 
                                             <div class="m-t-sm">
                                                 <a href="#" class="text-muted"><i class="fa fa-trash"></i> Ürünü iptal et</a>
@@ -43,14 +39,14 @@
                                         </td>
 
                                         <td>
-                                            @cart.Product.ProductPrice
+                                            @cart.Product.ProductPrice.ToString("N0") ₺
                                         </td>
                                         <td width="65">
                                             <input type="text" class="form-control" placeholder="1">
                                         </td>
                                         <td>
                                             <h4>
-                                                @cart.Product.ProductPrice
+                                                @cart.Product.ProductPrice.ToString("N0") ₺
                                             </h4>
                                         </td>
                                     </tr>
@@ -62,7 +58,10 @@
                 </div>
                 <div class="ibox-content">
 
-                    <button class="btn btn-white"><i class="fa fa-arrow-left"></i> Alışverişe Dön</button>
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-white">
+                        <i class="fa fa-arrow-left"></i> Alışverişe Dön
+                    </a>
+
 
                 </div>
             </div>

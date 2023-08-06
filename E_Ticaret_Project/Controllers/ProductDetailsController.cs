@@ -1,6 +1,7 @@
 ﻿using E_Ticaret_Project.Migrations;
 using E_Ticaret_Project.Models;
 using E_Ticaret_Project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace E_Ticaret_Project.Controllers
 {
+    [AllowAnonymous]
     public class ProductDetailsController : Controller
     {
         private readonly MyDbContext _baglanti;

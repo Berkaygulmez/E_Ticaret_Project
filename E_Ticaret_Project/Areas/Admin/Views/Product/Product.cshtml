@@ -207,8 +207,8 @@
                 {
                     data: 'productDescription',
                     render: function (data, type, row) {
-                        if (data.length > 50) {
-                            return data.substring(0, 50) + '...';
+                        if (data.length > 150) {
+                            return data.substring(0, 150) + '...';
                         } else {
                             return data;
                         }

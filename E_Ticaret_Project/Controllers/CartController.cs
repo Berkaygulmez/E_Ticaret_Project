@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace E_Ticaret_Project.Controllers
 {
+
     public class CartController : Controller
     {
         private readonly MyDbContext _baglanti;

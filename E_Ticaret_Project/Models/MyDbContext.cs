@@ -5,10 +5,7 @@ namespace E_Ticaret_Project.Models
 {
     public class MyDbContext:DbContext
     {
-        public MyDbContext(DbContextOptions<MyDbContext> options)
-            : base(options)
-        {
-        }
+        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options){}
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -19,5 +16,6 @@ namespace E_Ticaret_Project.Models
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Address> Addresses { get; set; }
     }
 }

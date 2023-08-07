@@ -14,7 +14,8 @@
     </div>
 }
 else
-{
+{    //Model doluysa yapılacak işler
+    //Filtreleme bölümü
     <div class="row">
         <div class="col-lg-12">
 
@@ -27,41 +28,18 @@ else
                     <div class="row">
                         <div class="col-md-4">
                             <h5>Fiyat aralığı giriniz</h5>
-                            <input type="text" id="example_id" name="example_name" value="" />
+                            @*    <input type="text" id="example_id" name="example_name" value="" />*@
+                            <div id="ionrange_1"></div>
                         </div>
-              
-                        <div class="col-md-4">
-                            <p>
-                               Marka Seçiniz
-                            </p>
-                            <select class="select2_demo_1 form-control">
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
-                                <option value="3">Option 3</option>
-                                <option value="4">Option 4</option>
-                                <option value="5">Option 5</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <p>
-                                Model Seçiniz
-                            </p>
-                            <select class="select2_demo_1 form-control">
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
-                                <option value="3">Option 3</option>
-                                <option value="4">Option 4</option>
-                                <option value="5">Option 5</option>
-                            </select>
-                        </div>
+                        <button onclick="filtrelefunction()" class="btn btn-lg btn-primary">Filtrele</button>
                     </div>
                 </div>
             </div>
             <div class="ibox-content"></div>
-
         </div>
     </div>
-    //Model doluysa yapılacak işler
+
+
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             @*Ürün listemizi dönüyoruz*@
@@ -135,8 +113,60 @@ else
     </div>
 
 }
+@*
+//?&min=10&max=18000*@
 
-<script>$("#example_id").ionRangeSlider();</script>
+<script>
+    function filtrelefunction() {
+
+        var url = window.location.href.split('?')[0];
+       
+
+        var newurl = url + "?&min=" + min + "&max=" + max;
+
+        window.location.href = newurl;
+
+    }
+</script>
+
+@*<script>$("#example_id").ionRangeSlider();</script>*@
+
+<script>
+
+    //var rangeSlider = $("#ionrange_1");
+
+    //rangeSlider.ionRangeSlider({
+    //    min: 0,
+    //    max: @ViewBag.MaxPrice,
+    //    type: 'double',
+    //    prefix: "₺",
+    //    maxPostfix: "+",
+    //    prettify: false,
+    //    hasGrid: true
+    //});
+
+    var min;
+    var max;
+
+    var rangeSlider = $("#ionrange_1");
+
+    rangeSlider.ionRangeSlider({
+        min: 0,
+        max: @ViewBag.MaxPrice,
+        type: 'double',
+        prefix: "₺",
+        maxPostfix: "+",
+        prettify: false,
+        hasGrid: true,
+        onFinish: function (data) {
+            console.log("Mevcut Min Değer:", data.from);
+            min=data.from;
+            console.log("Mevcut Max Değer:", data.to);
+            max=data.to;
+        }
+    });
+
+</script>
 
 <style>
     .custom-heading {

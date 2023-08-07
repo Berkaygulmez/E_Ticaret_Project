@@ -19,24 +19,6 @@ namespace E_Ticaret_Project.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("E_Ticaret_Project.Models.Address", b =>
-                {
-                    b.Property<int>("AddressID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("RegisterAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegisterID")
-                        .HasColumnType("int");
-
-                    b.HasKey("AddressID");
-
-                    b.ToTable("Addresses");
-                });
-
             modelBuilder.Entity("E_Ticaret_Project.Models.Cart", b =>
                 {
                     b.Property<int>("CartID")
@@ -209,6 +191,26 @@ namespace E_Ticaret_Project.Migrations
                     b.ToTable("Registers");
                 });
 
+            modelBuilder.Entity("E_Ticaret_Project.Models.RegisterAddress", b =>
+                {
+                    b.Property<int>("RegisterAddressID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RegisterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("RegisterAddressID");
+
+                    b.HasIndex("RegisterID");
+
+                    b.ToTable("RegisterAddresses");
+                });
+
             modelBuilder.Entity("E_Ticaret_Project.Models.Trademark", b =>
                 {
                     b.Property<int>("TrademarkID")
@@ -307,6 +309,17 @@ namespace E_Ticaret_Project.Migrations
                         .IsRequired();
 
                     b.Navigation("product");
+                });
+
+            modelBuilder.Entity("E_Ticaret_Project.Models.RegisterAddress", b =>
+                {
+                    b.HasOne("E_Ticaret_Project.Models.Register", "Register")
+                        .WithMany()
+                        .HasForeignKey("RegisterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Register");
                 });
 
             modelBuilder.Entity("E_Ticaret_Project.Models.Trademark", b =>

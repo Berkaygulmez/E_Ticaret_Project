@@ -19,18 +19,42 @@ namespace E_Ticaret_Project.Controllers
             _baglanti = context;
         }
 
-        public IActionResult ProductList(int id) //tamam id dedik şimdi çalışır dene
+        public IActionResult ProductList(int id, int? min, int? max) //tamam id dedik şimdi çalışır dene
         {
+
             ProductandProductImage panda = new ProductandProductImage();
 
-            //sadece ürünleri ve kategorisini getirelim zatn bir ürünün bir kategorisi olacağı için burda sıkıntı çıkmaz
-            panda.ProductList = _baglanti.Products
-                .Where(p => p.CategoryID == id)
-                .Include(p => p.Category)
-                .ToList();
+            if (min == null && max == null)
+            {
+                //sadece ürünleri ve kategorisini getirelim zatn bir ürünün bir kategorisi olacağı için burda sıkıntı çıkmaz
+                panda.ProductList = _baglanti.Products
+                    .Where(p => p.CategoryID == id)
+                    .Include(p => p.Category)
+                    .ToList();
+            }
+            else
+            {
+                //
+                panda.ProductList = _baglanti.Products
+                    .Where(p => p.CategoryID == id && p.ProductPrice >= min && p.ProductPrice <= max)
+                    .Include(p => p.Category)
+                    .ToList();
+            }
 
 
-            panda.ProductImageList = _baglanti.ProductImages.ToList(); 
+            if (panda.ProductList.Count() > 0)
+            {
+                int maximumPrice = _baglanti.Products.Where(x => x.CategoryID == id).Max(p => p.ProductPrice);
+                ViewBag.MaxPrice = maximumPrice;
+            }
+            else
+            {
+                //Viewbag boş olmaması için bunu yapıyoruz. hata almamak için.
+                int maximumPrice = 10000;
+                ViewBag.MaxPrice = maximumPrice;
+            }
+
+            panda.ProductImageList = _baglanti.ProductImages.ToList();
 
             return View(panda); //enfes dondurma :)
         }

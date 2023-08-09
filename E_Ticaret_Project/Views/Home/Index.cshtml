@@ -66,9 +66,40 @@
 
 </div>
 
-
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
+        @foreach (var item in Model.Categories)
+        {
+            <div class="col-lg-4">
+                <div class="widget-head-color-box navy-bg p-lg text-center">
+                    <div class="m-b-md">
+                        <h2 href="/ProductList/ProductList/@item.CategoryID" class="font-bold no-margins">
+                            @item.CategoryName
+                        </h2>
+
+                    </div>
+                    <a href="/ProductList/ProductList/@item.CategoryID">
+                        <img src="~/Image/CategoryImage/@item.CategoryImage" class="rounded-circle circle-border m-b-md category-image" alt="profile">
+                    </a>
+
+                    <div>
+                        <span>@ViewBag.TotalProductPiece Ürün</span>                  
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<h2 class="font-bold no-margins">
+    Ürünler
+</h2>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+
         @foreach (var item in Model.Products)
         {
             <div class="col-md-3">
@@ -77,33 +108,33 @@
                 <div class="card h-60">
                     <div class="card-body d-flex flex-column">
                         <div class="product-images">
-                        @if (Model.ProductImages != null && Model.ProductImages.Any())
-                        {
-                    //boş değilse çalış
-
-                    //  <div class="product-imitation">
-                            @*  ürüne ait kaç resim olduğu bizi bağlamaz ilk resmi alıcaz o yüzden foreach a gerek yok*@
-                            @foreach (var foto in Model.ProductImages.Where(x => x.ProductID == item.ProductID))
+                            @if (Model.ProductImages != null && Model.ProductImages.Any())
                             {
-                                <div>
+                            //boş değilse çalış
 
-                                    <div class="image-imitation pt-1 pb-1">
-                                        <a href="/ProductDetails/Index/@item.ProductID">
-                                            <img class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
-                                     src="~/Image/ProductImage/@foto.ProductImageUrl" alt="Resim Açıklaması">
-                                        </a>
+                            //  <div class="product-imitation">
+                                @*  ürüne ait kaç resim olduğu bizi bağlamaz ilk resmi alıcaz o yüzden foreach a gerek yok*@
+                                @foreach (var foto in Model.ProductImages.Where(x => x.ProductID == item.ProductID))
+                                {
+                                    <div>
+
+                                        <div class="image-imitation pt-1 pb-1">
+                                            <a href="/ProductDetails/Index/@item.ProductID">
+                                                <img class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
+                                         src="~/Image/ProductImage/@foto.ProductImageUrl" alt="Resim Açıklaması">
+                                            </a>
+                                        </div>
                                     </div>
+                                }
+                                // </div>
+                            }
+                            else
+                            {
+                                //boşsa burası çalışır bişeyler oldu
+                                <div class="product-imitation">
+                                    [ Resim Bulunamadı. ]
                                 </div>
                             }
-                            // </div>
-                        }
-                        else
-                        {
-                            //boşsa burası çalışır bişeyler oldu
-                            <div class="product-imitation">
-                                [ Resim Bulunamadı. ]
-                            </div>
-                        }
                         </div>
                         <div class="product-desc">
                             <span class="product-price">
@@ -136,3 +167,16 @@
     </div>
 
 </div>
+
+
+
+
+
+
+<style>
+    .category-image {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+    }
+</style>

@@ -7,5 +7,6 @@ namespace E_Ticaret_Project.Models
         [Key]
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }
+        public string CategoryImage { get; set; }
     }
 }

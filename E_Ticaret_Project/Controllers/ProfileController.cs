@@ -3,6 +3,7 @@ using E_Ticaret_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 
 namespace E_Ticaret_Project.Controllers
 {
@@ -15,10 +16,12 @@ namespace E_Ticaret_Project.Controllers
             _baglanti = context;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index()
         {
-            var register = _baglanti.Registers.Find(id);
-            var registerAddress = _baglanti.RegisterAddresses.Where(x => x.RegisterID == id).ToList(); //o kullanıcıya ait tüm adreslerin listesini alıyorum
+            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+
+            var register = _baglanti.Registers.Find(userID);
+            var registerAddress = _baglanti.RegisterAddresses.Where(x => x.RegisterID == userID).ToList(); //o kullanıcıya ait tüm adreslerin listesini alıyorum
 
             var viewModel = new RegisterViewModel
             {
@@ -30,8 +33,6 @@ namespace E_Ticaret_Project.Controllers
 
         public ActionResult EditProfile() //bunu yapmışsın ama Index de hiçbir yerde kullanmamışsın ki
         {
-
-
             return View();
         }
 
@@ -40,36 +41,33 @@ namespace E_Ticaret_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var register = _baglanti.Registers.Find(viewModel.Register.RegisterID); //kullanıcıyı buldun
+              //  int userID = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                //kullanıcının bilgilerini güncelledin
+                // Kullanıcıyı veritabanından çek
+                var user = _baglanti.Registers.FirstOrDefault(u => u.RegisterID == viewModel.Register.RegisterID);
 
-                //foreach açtın kaç adres varsa o kadar listeyi döndün
-                //adresi güncelledin
+                if (user != null)
+                {
+                    // Kullanıcının profil verilerini güncelle
+                    user.RegisterID = viewModel.Register.RegisterID;
+                    user.NameSurname = viewModel.Register.NameSurname;
+                    user.UserName = viewModel.Register.UserName;
+                    user.Mail = viewModel.Register.Mail;
+                    // Diğer özellikleri güncellemeye devam edebilirsiniz
 
+                    // Değişiklikleri kaydet
+                    _baglanti.Registers.Update(user); // Registers yerine doğru DbSet adını kullanmalısınız
+                    _baglanti.SaveChanges();
 
-
-                //alt taraf yok yani :) 
-                //var registerAddress = _baglanti.RegisterAddresses.FirstOrDefault(ra => ra.RegisterID == viewModel.Register.RegisterID);
-
-                //if (register != null)
-                //{
-                //    register.NameSurname = viewModel.Register.NameSurname;
-                //    register.UserName = viewModel.Register.UserName;
-                //    register.Mail = viewModel.Register.Mail;
-
-                //    if (registerAddress != null)
-                //    {
-                //        //registerAddress.Address = viewModel.RegisterAddress.Address;
-                //    }
-
-                //    _baglanti.SaveChanges();
-                //    return RedirectToAction(); // İstenilen sayfaya yönlendirme
-                //}
+                    // Profil güncelleme başarılı oldu, başka bir sayfaya yönlendir
+                    return RedirectToAction("Index", "Profile"); // Örneğin kullanıcının profilini gösteren bir sayfaya yönlendirebilirsiniz
+                }
             }
 
             return View(viewModel); // Hata durumunda view'i tekrar gösterme
         }
+
+
 
         public ActionResult GetAddresses(int userId)
         {

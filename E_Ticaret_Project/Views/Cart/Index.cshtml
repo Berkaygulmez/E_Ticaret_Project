@@ -6,7 +6,7 @@
 
             <div class="ibox">
                 <div class="ibox-title">
-                    <span class="float-right">(<strong>1</strong>) Ürün</span>
+                    <span class="float-right">(<strong>@ViewBag.ProductPiece</strong>) Ürün</span>
                     <h5>Sepette ki ürünler</h5>
                 </div>
                 <div class="ibox-content">
@@ -25,16 +25,31 @@
                                         </td>
                                         <td class="desc">
                                             <h3>
-                                                <a href="#" class="text-navy">
-                                                  @cart.Product.ProductName
+                                                <a href="/ProductDetails/Index/@cart.ProductID" class="text-navy">
+                                                    @cart.Product.ProductName
                                                 </a>
                                             </h3>
+                                            @*    //Ürün Açıklaması*@
                                             <p class="small">
-                                                @cart.Product.ProductDescription
+                                                @{
+                                                    string productDescription = cart.Product.ProductDescription;
+                                                    if (productDescription.Length > 350)
+                                                    {
+                                                        productDescription = productDescription.Substring(0, 350); // İlk 200 karakteri al
+                                                        int lastSpaceIndex = productDescription.LastIndexOf(" "); // Son boşluğun indeksini bul
+                                                        if (lastSpaceIndex > -1)
+                                                        {
+                                                            productDescription = productDescription.Substring(0, lastSpaceIndex); // Son kelimeye kadar al
+                                                        }
+                                                        productDescription += "..."; // Son kelimenin sonuna üç nokta ekle
+                                                    }
+                                                    @productDescription
+                                                }
                                             </p>
 
+                                            @*Ürünü iptal etme butonu*@
                                             <div class="m-t-sm">
-                                                <a href="#" class="text-muted"><i class="fa fa-trash"></i> Ürünü iptal et</a>
+                                                <a href="@Url.Action("DeleteProduct", "Cart", new { productId = cart.Product.ProductID })" class="text-muted"><i class="fa fa-trash"></i> Ürünü iptal et</a>
                                             </div>
                                         </td>
 
@@ -42,11 +57,13 @@
                                             @cart.Product.ProductPrice.ToString("N0") ₺
                                         </td>
                                         <td width="65">
-                                            <input type="text" class="form-control" placeholder="1">
+                                            <input onchange="updateTotal()" type="number" id="inputValue" class="form-control" placeholder="1" min="1" value="@cart.Piece">
                                         </td>
                                         <td>
-                                            <h4>
-                                                @cart.Product.ProductPrice.ToString("N0") ₺
+                                            <h4 id="productPrice">
+                                                @string.Format("{0:N0}", cart.Piece * cart.Product.ProductPrice) ₺
+
+                                               @* @(cart.Piece * cart.Product.ProductPrice).ToString("N0")) ₺*@
                                             </h4>
                                         </td>
                                     </tr>
@@ -62,13 +79,12 @@
                         <i class="fa fa-arrow-left"></i> Alışverişe Dön
                     </a>
 
-
                 </div>
             </div>
-
         </div>
-        <div class="col-md-3">
 
+
+        <div class="col-md-3">
             <div class="ibox">
                 <div class="ibox-title">
                     <h5>Sepet Tutarı</h5>
@@ -78,7 +94,7 @@
                         Toplam
                     </span>
                     <h2 class="font-bold">
-                        x ₺
+                        @ViewBag.ToplamCart.ToString("N0") ₺
                     </h2>
 
                     <hr />
@@ -87,19 +103,15 @@
                     </span>
                     <div class="m-t-sm">
                         <div>
-                            <form action="@Url.Action("CompleteOrder", "Order")" method="post">
+                            <form action="@Url.Action("CartPay", "Cart")" method="post">
                                 <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Siparişi Tamamla</button>
                             </form>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
-
-        <div class="ibox">
-        </div>
+       
     </div>
 </div>
 
@@ -125,3 +137,5 @@
         });
     }
 </script>
+
+

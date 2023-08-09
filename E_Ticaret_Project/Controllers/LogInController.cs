@@ -51,7 +51,10 @@ namespace E_Ticaret_Project.Controllers
 
 
                     var claims = new List<Claim>                        // claimler ile Otantike oldundu
-                    { new Claim(ClaimTypes.Name,"şimdilikfaketmez")};
+                    { 
+                        new Claim(ClaimTypes.Name,user.UserName),
+                        new Claim(ClaimTypes.Role,user.RegisterID.ToString())
+                    };
                     var useridentity = new ClaimsIdentity(claims, "a");
                     ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
                     await HttpContext.SignInAsync(principal);

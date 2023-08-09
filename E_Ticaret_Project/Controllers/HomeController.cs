@@ -3,6 +3,7 @@ using E_Ticaret_Project.ViewComponents;
 using E_Ticaret_Project.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace E_Ticaret_Project.Controllers
             model.Version = _baglanti.Versions.ToList();
 
 
+            ViewBag.TotalProductPiece = model.Products.Count();
+
             //daha güzel yöntemler vardır ama bende çok iyi bilmiyorum şimdi gidip productımage tablosunu komple çekicez
             model.ProductImages = _baglanti.ProductImages.ToList();
 
@@ -52,6 +55,16 @@ namespace E_Ticaret_Project.Controllers
 
 
             return View(model);
+        }
+
+
+        public IActionResult Search(string q)
+        {
+            List<Product> searchResults = _baglanti.Products
+                .Where(u => u.ProductName.Contains(q))
+                .ToList();
+
+            return Json(searchResults);
         }
 
     }

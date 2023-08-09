@@ -11,25 +11,40 @@
             </button>
         </div>
         <div class="collapse navbar-collapse justify-content-end" id="navbar">
+
+            <div class="search-container">
+                <input class="form-control" type="text" id="search" name="q" placeholder="Hangi Ürünü Arıyorsun?">
+                <ul id="searchResults" class="search-results"></ul>
+            </div>
+
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="nav-link " href="/Home/Index">AnaSayfa</a></li>
-                @foreach (var item in Model)
-                {
-                    <li><a class="nav-link " href="/ProductList/ProductList/@item.CategoryID">@item.CategoryName</a></li>
-                }
+                <li>
+                    <a class="nav-link " href="/Home/Index">
+                        <i class="fa fa-home"></i>
+                        AnaSayfa
+                    </a>
+                </li>
+
                 <li>
                     <a class="nav-link" href="/Cart/Index">
                         <i class="fa fa-shopping-basket"></i>
                         SEPETİM
                     </a>
                 </li>
+
                 @if (User.Identity.IsAuthenticated == true)
                 {
+                    <li>
+                        <a class="nav-link" href="/Profile/Index">
+                            <i class="fa fa-user-circle"></i>
+                            PROFİLİM
+                        </a>
+                    </li>
                     <li><a class="nav-link " href="/LogIn/Logout">ÇIKIŞ YAP</a></li>
                 }
                 else
                 {
-                    <li><a class="nav-link " href="/LogIn/Index">GİRİŞ YAP</a></li>               
+                    <li><a class="nav-link " href="/LogIn/Index">GİRİŞ YAP</a></li>
                 }
             </ul>
         </div>
@@ -37,9 +52,91 @@
 </nav>
 
 
-@*<style>
-    .navbar {
-        position: fixed;
-        height:100px;
+<script>
+    // Arama kutusuna her tuşa basıldığında çalışacak fonksiyon
+    //document.getElementById("search").addEventListener("keyup", function () {
+    //    console.log("Bir tuşa basıldı.");
+    //});
+
+    $(document).ready(function () {
+        $('#search').on('input', function () {
+            var searchTerm = $(this).val();
+            if (searchTerm.length >= 2) {
+                $.ajax({
+                    url: '/Home/Search', // Arama sonuçlarını döndüren Controller aksiyonunun yolunu belirtin
+                    data: { q: searchTerm },
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        var resultsList = $('#searchResults');
+                        resultsList.empty();
+                        $.each(data, function (index, item) {
+                            var listItem = $('<li>').text(item.productName); // item.ProductName değil, sadece item
+                            resultsList.append(listItem);
+                        });
+                        resultsList.show();
+                    }
+                });
+            } else {
+                $('#searchResults').hide();
+            }
+        });
+
+        // Eğer bir sonuç seçilirse, seçilen değeri arama kutusuna yerleştirin
+        $('#searchResults').on('click', 'li', function () {
+            var selectedValue = $(this).text();
+            $('#search').val(selectedValue);
+            $('#searchResults').hide();
+        });
+
+        // Başka bir yere tıklandığında arama sonuçlarını gizle
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('.search-container').length) {
+                $('#searchResults').hide();
+            }
+        });
+    });
+
+
+</script>
+
+<style>
+    /* Arama sonuçları listesi stilini burada ayarlayın */
+    .search-results {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 5px;
+        z-index: 1000; /* Yukarıda önerilen z-index değeri */
+        /* Aşağıdaki stil özellikleri ile listeyi daha iyi görünüme kavuşturabilirsiniz */
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+        border-radius: 5px; /* Köşe yuvarlatma */
+        background-color: white; /* Arka plan rengi */
     }
-</style>*@
+
+        .search-results li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s;
+            /* Aşağıdaki stil özellikleri ile liste öğelerini daha iyi görünüme kavuşturabilirsiniz */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .search-results li:last-child {
+                border-bottom: none;
+            }
+
+            .search-results li:hover {
+                background-color: #f2f2f2;
+            }
+
+</style>

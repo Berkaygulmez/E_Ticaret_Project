@@ -1,4 +1,4 @@
-﻿@model List<Category>
+﻿@model Category
 @{
     ViewData["Title"] = "CategoryAdd";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -67,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                           @* normalde buraya foreach yaparız ama ajaxla tabloyu doldurucaz*@
+                            @* normalde buraya foreach yaparız ama ajaxla tabloyu doldurucaz*@
                         </tbody>
                     </table>
 
@@ -78,133 +78,138 @@
 </div>
 
 @section Scripts
- {
+    {
 
-@*datatable ı ajax ile dolduruyoruz*@
-<script>
-    var table = null;
-    $(function () {
-        table = $('#categoryTable').DataTable({
-            pageLength: 10,
-            responsive: true,
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
-            },
-            ajax: {
-                url: '/Admin/Category/CategoryList',
+    @*datatable ı ajax ile dolduruyoruz*@
+    <script>
+        var table = null;
+        $(function () {
+            table = $('#categoryTable').DataTable({
+                pageLength: 10,
+                responsive: true,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
+                },
+                ajax: {
+                    url: '/Admin/Category/CategoryList',
+                    type: 'GET',
+                    dataType: 'json',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'categoryID' },
+                    { data: 'categoryName' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#myModal6" onclick="kategoriGuncelle(' + data.categoryID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
+                                '<button class="btn btn-danger mr-2" type="button" onclick="kategoriSil(' + data.categoryID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>' +
+                            '<button class="btn btn-primary mr-2" onclick="FotoEkle(' + data.categoryID + ')"><i class="fa fa-camera pr-1"></i>Fotoğraf Ekle</button>';
+                        }
+                    }
+                ]
+            });
+        });
+
+    </script>
+
+    @*ajax ile veri ekleme işlemi*@
+    <script>
+
+        $('#addForm').submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+
+            $.ajax({
+                url: '/Admin/Category/CategoryAdd',
+                type: 'POST',
+                data: form.serialize(),
+                success: function (response) {
+                    form.trigger("reset"); //formdaki verileri temizle artık onlarla işin kalmadı
+                    form = null; //formdan gelen verileri karşılayan değişkeninde içini siliyorum ki arka arkaya veriler eklediğimde form değişkeninde birikme olmasın
+                    $('#myModal5').modal('hide'); //modeli kapatır
+                    table.ajax.reload(); // Eklenen veriyi de tabloya eklemek için tabloyu yeniden yükle
+                    toastr.success('Kategori ekleme işlemi başarılı.');
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Kategori ekleme işlemi sırasında bir hata meydana geldi.');
+                }
+            });
+        });
+
+    </script>
+
+    @*ajax ile veri güncelleme işlemi*@
+    <script>
+
+        function kategoriGuncelle(id) {
+            $.ajax({
+                url: '/Admin/Category/GetCategoryById/' + id,
                 type: 'GET',
                 dataType: 'json',
-                dataSrc: ''
-            },
-            columns: [
-                { data: 'categoryID' },
-                { data: 'categoryName' },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#myModal6" onclick="kategoriGuncelle(' + data.categoryID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
-                               '<button class="btn btn-danger mr-2" type="button" onclick="kategoriSil(' + data.categoryID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>';
-                    }
-                }
-            ]
-        });
-    });
-
-</script>
-
-@*ajax ile veri ekleme işlemi*@
-<script>
-
-    $('#addForm').submit(function (e) {
-        e.preventDefault();
-        var form = $(this);
-
-        $.ajax({
-            url: '/Admin/Category/CategoryAdd',
-            type: 'POST',
-            data: form.serialize(),
-            success: function (response) {
-                form.trigger("reset"); //formdaki verileri temizle artık onlarla işin kalmadı
-                form = null; //formdan gelen verileri karşılayan değişkeninde içini siliyorum ki arka arkaya veriler eklediğimde form değişkeninde birikme olmasın
-                $('#myModal5').modal('hide'); //modeli kapatır
-                table.ajax.reload(); // Eklenen veriyi de tabloya eklemek için tabloyu yeniden yükle
-                toastr.success('Kategori ekleme işlemi başarılı.');
-            },
-            error: function (xhr, status, error) {
-                toastr.error('Kategori ekleme işlemi sırasında bir hata meydana geldi.');
-            }
-        });
-    });
-
-</script>
-
-@*ajax ile veri güncelleme işlemi*@
-<script>
-
-    function kategoriGuncelle(id) {
-        $.ajax({
-            url: '/Admin/Category/GetCategoryById/' + id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                //GetCategoryById'den ggelen verileri inputlara dolduruyoruz
-                $.each(response, function (key, value) {
-                    var inputName = key.charAt(0).toUpperCase() + key.slice(1);
-                    $('#updateForm input[name="' + inputName + '"]').val(value);
-                });
-                // Güncelleme işlemi için form submit işlemi
-                $('#updateForm').off('submit').on('submit', function (e) {
-                    e.preventDefault();
-                    var form = $(this);
-                    var data = form.serialize();
-
-                    $.ajax({
-                        url: '/Admin/Category/CategoryUpdate',
-                        type: 'POST',
-                        data: data,
-                        success: function (response) {
-                            // Başarılı bir şekilde güncellendiğinde yapılacak işlemler
-                            $('#myModal6').modal('hide');
-                            table.ajax.reload(); // Güncellenen veriyi de tabloya eklemek için tabloyu yeniden yükle
-                            toastr.success('Kategori güncelleme işlemi başarılı.');
-                        },
-                        error: function (xhr, status, error) {
-                            // Hata durumunda yapılacak işlemler
-                            toastr.error('Kategori güncelleme işlemi sırasında bir hata meydana geldi.');
-                        }
+                success: function (response) {
+                    //GetCategoryById'den ggelen verileri inputlara dolduruyoruz
+                    $.each(response, function (key, value) {
+                        var inputName = key.charAt(0).toUpperCase() + key.slice(1);
+                        $('#updateForm input[name="' + inputName + '"]').val(value);
                     });
-                });
-            },
-            error: function (xhr, status, error) {
-                // Hata durumunda yapılacak işlemler
-                toastr.error('Kategori bilgileri getirilirken bir hata meydana geldi.');
-            }
-        });
-    }
+                    // Güncelleme işlemi için form submit işlemi
+                    $('#updateForm').off('submit').on('submit', function (e) {
+                        e.preventDefault();
+                        var form = $(this);
+                        var data = form.serialize();
 
-</script>
+                        $.ajax({
+                            url: '/Admin/Category/CategoryUpdate',
+                            type: 'POST',
+                            data: data,
+                            success: function (response) {
+                                // Başarılı bir şekilde güncellendiğinde yapılacak işlemler
+                                $('#myModal6').modal('hide');
+                                table.ajax.reload(); // Güncellenen veriyi de tabloya eklemek için tabloyu yeniden yükle
+                                toastr.success('Kategori güncelleme işlemi başarılı.');
+                            },
+                            error: function (xhr, status, error) {
+                                // Hata durumunda yapılacak işlemler
+                                toastr.error('Kategori güncelleme işlemi sırasında bir hata meydana geldi.');
+                            }
+                        });
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Hata durumunda yapılacak işlemler
+                    toastr.error('Kategori bilgileri getirilirken bir hata meydana geldi.');
+                }
+            });
+        }
 
-@*ajax ile veri silme işlemi*@
-<script>
+    </script>
 
-    function kategoriSil(kategoriId) {
-        $.ajax({
-            url: '/Admin/Category/CategoryDelete',
-            type: 'POST',
-            data: { categoryID: kategoriId }, // Silinecek kategori ID'si
-            success: function (response) {
-                // Başarılı bir şekilde silindiğinde yapılacak işlemler
-                console.log(response);
-                table.ajax.reload();  //Silme işlemi bittikten sonra tabloyu yeniden göstersin
-                toastr.success('Kategori silme işlemi başarılı.');
-            },
-            error: function (xhr, status, error) {
-                // Hata durumunda yapılacak işlemler
-                toastr.error('Kategori bilgileri silinirken bir hata meydana geldi.');
-            }
-        });
-    }
+    @*ajax ile veri silme işlemi*@
+    <script>
 
-</script>
+        function kategoriSil(kategoriId) {
+            $.ajax({
+                url: '/Admin/Category/CategoryDelete',
+                type: 'POST',
+                data: { categoryID: kategoriId }, // Silinecek kategori ID'si
+                success: function (response) {
+                    // Başarılı bir şekilde silindiğinde yapılacak işlemler
+                    console.log(response);
+                    table.ajax.reload();  //Silme işlemi bittikten sonra tabloyu yeniden göstersin
+                    toastr.success('Kategori silme işlemi başarılı.');
+                },
+                error: function (xhr, status, error) {
+                    // Hata durumunda yapılacak işlemler
+                    toastr.error('Kategori bilgileri silinirken bir hata meydana geldi.');
+                }
+            });
+        }
 
+    </script>
+
+    <script>
+        function FotoEkle(categoryID) {
+            window.location.href = '/Admin/Category/AddCategoryImage/' + categoryID;
+        }</script>
 }

@@ -1,7 +1,14 @@
 ﻿using E_Ticaret_Project.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace E_Ticaret_Project.Controllers
 {
@@ -21,9 +28,21 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult CompleteOrder()
         {
-            // Kullanıcının sepetini bulun
-            int RegisterID = 8;
-            var userCartItems = _baglanti.Carts.Where(c => c.RegisterID == RegisterID).ToList();
+            //string userID = null; // Başlangıçta userID'yi null olarak ayarlayın
+
+            //if (User.Identity.IsAuthenticated) //sisteme bir kullanıcı giriş yapmışmı diğer kontrolü
+            //{
+            //    var roleClaim = User.FindFirst(ClaimTypes.Role);
+            //    if (roleClaim != null)  // KUllanıcı Role=İd (olarak tanımladık) değeri var mı diye kontrol ediyoruz.
+            //    {
+            //        userID = roleClaim.Value; // userID'yi roleClaim'den alınan değere ata
+            //                                  // Gerekli işlemleri gerçekleştirin
+            //    }
+            //}
+
+            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+
+            var userCartItems = _baglanti.Carts.Where(c => c.RegisterID == Convert.ToInt64(userID)).ToList();
 
             if (userCartItems.Any())
             {
@@ -49,7 +68,7 @@ namespace E_Ticaret_Project.Controllers
             }
 
             // Siparişi tamamladıktan sonra kullanıcıyı uygun sayfaya yönlendirin
-            return RedirectToAction("OrderCompleted", "Order");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

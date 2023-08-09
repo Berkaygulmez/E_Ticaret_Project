@@ -26,7 +26,7 @@ namespace E_Ticaret_Project.Controllers
 
             if (min == null && max == null)
             {
-                //sadece ürünleri ve kategorisini getirelim zatn bir ürünün bir kategorisi olacağı için burda sıkıntı çıkmaz
+                //sadece ürünleri ve kategorisini getirelim zaten bir ürünün bir kategorisi olacağı için burda sıkıntı çıkmaz
                 panda.ProductList = _baglanti.Products
                     .Where(p => p.CategoryID == id)
                     .Include(p => p.Category)
@@ -40,7 +40,6 @@ namespace E_Ticaret_Project.Controllers
                     .Include(p => p.Category)
                     .ToList();
             }
-
 
             if (panda.ProductList.Count() > 0)
             {

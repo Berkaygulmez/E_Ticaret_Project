@@ -45,8 +45,9 @@
                        
                         <hr>
                         <div>
-                            <form action="/Cart/AddToCart/@Model.Product.ProductID" method="post"> @*Burda productID yide gönderelim ki hangi ürünü sepete eklediğimizi bilelim*@
-                                <button type="submit" class="btn btn-primary btn-lg float-right">
+                            <form action="/Cart/AddToCart/@Model.Product.ProductID" method="post">
+                                @*Burda productID yide gönderelim ki hangi ürünü sepete eklediğimizi bilelim*@
+                                <button type="submit" class="btn btn-primary btn-lg float-right" onclick="addToCart()">
                                     <i class="fa fa-shopping-cart"></i> Sepete Ekle
                                 </button>
                             </form>
@@ -84,8 +85,12 @@
     <script src="~/Admin/js/plugins/slick/slick.min.js"></script>
 
     <script>
-        $(document).ready(function () {
 
+        function addToCart() { 
+            toastr.success('Ürün sepete eklendi.');
+        }
+
+        $(document).ready(function () {
 
             $('.product-images').slick({
                 dots: true

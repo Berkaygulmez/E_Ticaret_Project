@@ -70,20 +70,28 @@
     <div class="row">
         @foreach (var item in Model.Categories)
         {
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="widget-head-color-box navy-bg p-lg text-center">
                     <div class="m-b-md">
-                        <h2 href="/ProductList/ProductList/@item.CategoryID" class="font-bold no-margins">
-                            @item.CategoryName
-                        </h2>
-
+                        <a href="/ProductList/ProductList/@item.CategoryID" style="color: white; text-decoration: none;">
+                            <h2 style="font-weight: bold;">
+                                @item.CategoryName
+                            </h2>
+                        </a>
                     </div>
                     <a href="/ProductList/ProductList/@item.CategoryID">
-                        <img src="~/Image/CategoryImage/@item.CategoryImage" class="rounded-circle circle-border m-b-md category-image" alt="profile">
+                        @if (item.CategoryImage == null)
+                        {
+                            <img src="~/Image/CategoryImage/xz.jpg" class="rounded-circle circle-border m-b-md category-image" alt="profile">
+                        }
+                        else
+                        {
+                            <img src="~/Image/CategoryImage/@item.CategoryImage" class="rounded-circle circle-border m-b-md category-image" alt="profile">
+                        }
                     </a>
 
                     <div>
-                        <span>@ViewBag.TotalProductPiece Ürün</span>                  
+                        <span>@ViewBag.TotalProductPiece Ürün</span>
                     </div>
                 </div>
             </div>
@@ -92,9 +100,11 @@
 </div>
 
 
-<h2 class="font-bold no-margins">
-    Ürünler
-</h2>
+<div style="text-align: center;">
+    <h2 class="font-bold no-margins">
+        ÜRÜNLER
+    </h2>
+</div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
 
@@ -131,9 +141,11 @@
                             else
                             {
                                 //boşsa burası çalışır bişeyler oldu
-                                <div class="product-imitation">
-                                    [ Resim Bulunamadı. ]
-                                </div>
+
+                                        <div class="product-imitation">
+                                            [ Resim Bulunamadı. ]
+                                        </div>
+
                             }
                         </div>
                         <div class="product-desc">

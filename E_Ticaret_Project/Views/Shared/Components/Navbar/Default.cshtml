@@ -29,6 +29,7 @@
                     <a class="nav-link" href="/Cart/Index">
                         <i class="fa fa-shopping-basket"></i>
                         SEPETİM
+                        <span class="float-right">(<span>@ViewBag.ProductPiece</span>)</span>
                     </a>
                 </li>
 
@@ -40,11 +41,21 @@
                             PROFİLİM
                         </a>
                     </li>
-                    <li><a class="nav-link " href="/LogIn/Logout">ÇIKIŞ YAP</a></li>
+                    <li>
+                        <a class="nav-link " href="/LogIn/Logout">
+                            <i class=" fa fa-sign-out"></i>
+                            ÇIKIŞ YAP
+                        </a>
+                    </li>
                 }
                 else
                 {
-                    <li><a class="nav-link " href="/LogIn/Index">GİRİŞ YAP</a></li>
+                    <li>
+                        <a class="nav-link " href="/LogIn/Index">
+                            <i class=" fa fa-sign-in"></i>
+                            GİRİŞ YAP
+                        </a>
+                    </li>
                 }
             </ul>
         </div>
@@ -72,7 +83,9 @@
                         var resultsList = $('#searchResults');
                         resultsList.empty();
                         $.each(data, function (index, item) {
-                            var listItem = $('<li>').text(item.productName); // item.ProductName değil, sadece item
+
+                            var listItem = $('<li>').html('<a href="/ProductDetails/Index/' + item.productID + '">' + item.productName + '</a>');
+
                             resultsList.append(listItem);
                         });
                         resultsList.show();

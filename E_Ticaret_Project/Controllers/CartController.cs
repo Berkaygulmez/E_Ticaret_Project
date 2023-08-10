@@ -64,11 +64,9 @@ namespace E_Ticaret_Project.Controllers
                 }
 
 
-
-
                 TempData["SuccessMessage"] = "Ürün sepete eklendi.";
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "ProductDetails", new { id = id }); //ürünü sepete ekledikten sonra bu adrese gitsin
             }
             catch (Exception ex)
             {

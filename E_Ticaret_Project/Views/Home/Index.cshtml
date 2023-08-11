@@ -66,38 +66,127 @@
 
 </div>
 
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        @foreach (var item in Model.Categories)
-        {
-            <div class="col-lg-3">
-                <div class="widget-head-color-box navy-bg p-lg text-center">
-                    <div class="m-b-md">
-                        <a href="/ProductList/ProductList/@item.CategoryID" style="color: white; text-decoration: none;">
-                            <h2 style="font-weight: bold;">
-                                @item.CategoryName
-                            </h2>
-                        </a>
-                    </div>
-                    <a href="/ProductList/ProductList/@item.CategoryID">
-                        @if (item.CategoryImage == null)
-                        {
-                            <img src="~/Image/CategoryImage/xz.jpg" class="rounded-circle circle-border m-b-md category-image" alt="profile">
-                        }
-                        else
-                        {
-                            <img src="~/Image/CategoryImage/@item.CategoryImage" class="rounded-circle circle-border m-b-md category-image" alt="profile">
-                        }
-                    </a>
+<br />
+<br />
+<div style="text-align: center;">
+    <h2 class="font-bold no-margins">
+        En Çok Aratılan Ürünler
+    </h2>
 
-                    <div>
-                        <span>@ViewBag.TotalProductPiece Ürün</span>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+
+            @foreach (var item in Model.TopViewProduct)
+            {
+                <div class="col-md-3">
+                    @*          <div class="ibox">
+                <div class="ibox-content product-box">*@
+                    <div class="card h-60">
+                        <div class="card-body d-flex flex-column">
+                            <div class="product-images">
+                                @if (Model.ProductImages != null && Model.ProductImages.Any())
+                                {
+                                //boş değilse çalış
+
+                                //  <div class="product-imitation">
+                                    @*  ürüne ait kaç resim olduğu bizi bağlamaz ilk resmi alıcaz o yüzden foreach a gerek yok*@
+                                    @foreach (var foto in Model.ProductImages.Where(x => x.ProductID == item.ProductID))
+                                    {
+                                        <div>
+
+                                            <div class="image-imitation pt-1 pb-1">
+                                                <a href="/ProductDetails/Index/@item.ProductID">
+                                                    <img class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
+                                             src="~/Image/ProductImage/@foto.ProductImageUrl" alt="Resim Açıklaması">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
+                                    // </div>
+                                }
+                                else
+                                {
+                                    //boşsa burası çalışır bişeyler oldu
+
+                                    <div class="product-imitation">
+                                        [ Resim Bulunamadı. ]
+                                    </div>
+
+                                }
+                            </div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    @item.ProductPrice.ToString("N0") ₺
+                                </span>
+                                <small class="text-muted">@item.Category.CategoryName</small>
+                                <a href="/ProductDetails/Index/@item.ProductID" class="product-name"> @item.ProductName </a>
+
+                                <div class="small m-t-xs">
+                                    @if (item.ProductDescription.Length > 150)
+                                    {
+                                        <text>@item.ProductDescription.Substring(0, 150)...</text>
+                                    }
+                                    else
+                                    {
+                                        <text>@item.ProductDescription</text>
+                                    }
+                                </div>
+
+                                <div class="m-t text-righ">
+
+                                    <a href="/ProductDetails/Index/@item.ProductID" class="btn btn-xs btn-outline btn-primary">Ürüne Git <i class="fa fa-long-arrow-right pl-1"></i> </a>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
+
+<div style="text-align: center;">
+    <h2 class="font-bold no-margins">
+        KATEGORİLER
+    </h2>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            @foreach (var item in Model.Categories)
+            {
+                <div class="col-lg-3">
+                    <div class="widget-head-color-box navy-bg p-lg text-center">
+                        <div class="m-b-md">
+                            <a href="/ProductList/ProductList/@item.CategoryID" style="color: white; text-decoration: none;">
+                                <h2 style="font-weight: bold;">
+                                    @item.CategoryName
+                                </h2>
+                            </a>
+                        </div>
+                        <a href="/ProductList/ProductList/@item.CategoryID">
+                            @if (item.CategoryImage == null)
+                            {
+                                <img src="~/Image/CategoryImage/xz.jpg" class="rounded-circle circle-border m-b-md category-image" alt="profile">
+                            }
+                            else
+                            {
+                                <img src="~/Image/CategoryImage/@item.CategoryImage" class="rounded-circle circle-border m-b-md category-image" alt="profile">
+                            }
+                        </a>
+
+                        <div>
+                            <span>@ViewBag.TotalProductPiece Ürün</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
 
 
 <div style="text-align: center;">
@@ -142,9 +231,9 @@
                             {
                                 //boşsa burası çalışır bişeyler oldu
 
-                                        <div class="product-imitation">
-                                            [ Resim Bulunamadı. ]
-                                        </div>
+                                <div class="product-imitation">
+                                    [ Resim Bulunamadı. ]
+                                </div>
 
                             }
                         </div>
@@ -177,7 +266,6 @@
             </div>
         }
     </div>
-
 </div>
 
 

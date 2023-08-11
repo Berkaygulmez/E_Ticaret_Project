@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace E_Ticaret_Project.ViewComponents
 {
@@ -13,21 +14,24 @@ namespace E_Ticaret_Project.ViewComponents
     {
 
         private readonly MyDbContext _baglanti;
-
-        public Navbar(MyDbContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public Navbar(MyDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _baglanti = context;
+            _httpContextAccessor = httpContextAccessor; //bizim user nesnesini kullanmamızı sağlayan bir yapı enjekte ettik
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categoryList = _baglanti.Categories.ToList();
+            var newuser = _httpContextAccessor.HttpContext.User; //o yapıyı var user nesnesine atadık
+      
+            var cartList = _baglanti.Carts.ToList();
 
-            //int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
-            //var productpiece = _baglanti.Carts.Where(x => x.RegisterID == userID).Include(cart => cart.Product).ToList();
-            //ViewBag.ProductPiece = productpiece;
+            int userID = int.Parse(newuser.FindFirst(ClaimTypes.Role).Value); //burda eski User nesnesini değil yeni oluşturduğumuz user i kullandık dikkat et ilk harfi küçük yani aynı isimde ama karışmaz
+            int productpiece = _baglanti.Carts.Where(x => x.RegisterID == userID).Select(x => x.Piece).Sum();  //kullanıcı adı oturumdaki kullanıcı adı olan kişinin satırlarındaki Piece değerleri toplamını alıyorum bu bize giriş yapan kullanıcının kaç ürün aldığını gösterecek. kaç satır veri var ona bakmıyoruz satırların içinde bir üründen birden fazla almış olabilir
+            ViewBag.ProductPiece = productpiece;
 
-            return View(categoryList);
+            return View(cartList);
         }
 
     }

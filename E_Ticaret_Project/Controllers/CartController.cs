@@ -19,6 +19,7 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult Index()//buraya daha sonra giriş yapan kullanıcının id sini gireriz ona göre listeyi getirir şimdikik kalsın bakalım
         {
+            //olabilir
             //sisteme otantike olan kullanıcının ID'si
             int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value); 
 

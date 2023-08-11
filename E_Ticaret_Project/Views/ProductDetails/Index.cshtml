@@ -16,7 +16,7 @@
                         <div class="product-images">
                             @if (Model.ProductImageList != null && Model.ProductImageList.Any())
                             {
-                                foreach (var item in Model.ProductImageList) 
+                                foreach (var item in Model.ProductImageList)
                                 {
                                     <div>
                                         <div class="image-imitation pt-1 pb-1">
@@ -32,7 +32,7 @@
                                     [ Resim Bulunamadı. ]
                                 </div>
                             }
-                         
+
                         </div>
 
                     </div>
@@ -42,7 +42,7 @@
                         <h1 class="font-bold m-b-xs">
                             <strong>@Model.Product.ProductName</strong>
                         </h1>
-                       
+
                         <hr>
                         <div>
                             <form action="/Cart/AddToCart/@Model.Product.ProductID" method="post">
@@ -67,7 +67,7 @@
                         <div class="text-right">
                             <div class="btn-group">
                                 <button class="btn btn-white btn-sm"><i class="fa fa-star"></i> Add to wishlist </button>
-                                <button class="btn btn-white btn-sm"><i class="fa fa-envelope"></i> Contact with author </button>
+                                <a class="btn btn-white btn-sm"><i class="fa fa-eye"></i>  Görüntülenme Sayısı : @ViewBag.ProductViewCount </a>
                             </div>
                         </div>
                     </div>
@@ -86,10 +86,6 @@
 
     <script>
 
-        function addToCart() { 
-            toastr.success('Ürün sepete eklendi.');
-        }
-
         $(document).ready(function () {
 
             $('.product-images').slick({
@@ -98,7 +94,14 @@
 
         });
 
+        function addToCart() {
+            toastr.success('Ürün sepete eklendi.');
+        }
+
     </script>
+
+
+
     }
 
 

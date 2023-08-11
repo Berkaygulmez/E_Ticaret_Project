@@ -1,4 +1,4 @@
-﻿@model List<Category>
+﻿@model List<Cart>
 
 
 
@@ -29,7 +29,10 @@
                     <a class="nav-link" href="/Cart/Index">
                         <i class="fa fa-shopping-basket"></i>
                         SEPETİM
-                        <span class="float-right">(<span>@ViewBag.ProductPiece</span>)</span>
+                        @if (ViewBag.ProductPiece != 0)
+                        {
+                            <span class="float-right">(<span>@ViewBag.ProductPiece</span>)</span>
+                        }
                     </a>
                 </li>
 

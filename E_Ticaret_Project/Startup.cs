@@ -42,6 +42,8 @@ namespace E_Ticaret_Project
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            services.AddHttpContextAccessor();//componentte bu nesneyi kullandýk ve UserID yi çekebildik
+
             services.AddMvc();
             services.AddAuthentication(
                 CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x =>

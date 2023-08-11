@@ -28,10 +28,14 @@ namespace E_Ticaret_Project.Controllers
         {
             HomeModel model = new HomeModel();
             model.Products = _baglanti.Products.ToList();
+            model.TopViewProduct = _baglanti.Products.OrderByDescending(p => p.ProductViewCount)
+                                                    .Take(4)
+                                                    .ToList();
             model.Categories = _baglanti.Categories.ToList(); // Burada ürünlerin kategorilerini getirdik
             model.Trademarks = _baglanti.Trademarks.ToList();
             model.Version = _baglanti.Versions.ToList();
 
+           
 
             ViewBag.TotalProductPiece = model.Products.Count();
 

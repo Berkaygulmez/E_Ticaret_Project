@@ -1,8 +1,26 @@
-﻿
+﻿@model List<Product>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Ben areasın içindeki home index'iyim'</h1>
 
+<h1>En Çok Görüntülenen 4 Ürün</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Görüntülenme Sayısı</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductName</td>
+                <td>@product.ProductViewCount</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -83,15 +83,18 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult ProductAdd(Product product)
         {
+            product.ProductViewCount = 0;
             _baglanti.Products.Add(product);
             _baglanti.SaveChanges();
 
             return Json(new { success = true });
         }
 
+
         [HttpPost]
         public JsonResult ProductUpdate(Product data)
         {
+            data.ProductViewCount = 0; //ürün güncellenirse de sıfırlansın boşver :)
             _baglanti.Products.Update(data);
             _baglanti.SaveChanges();
 
@@ -133,9 +136,9 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
 
                 _baglanti.ProductImages.Add(ProductImage);
                 _baglanti.SaveChanges();
-            }     
+            }
             //verileri burada yani post işlemi yaparken gönderiyordun bu doğru değil
-            return View(); 
+            return View();
         }
 
     }

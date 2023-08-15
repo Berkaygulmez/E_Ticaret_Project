@@ -104,7 +104,7 @@
                                 <th>Kategori</th>
                                 <th>Marka</th>
                                 <th>Model</th>
-                                <th>İşlemler</th>
+                                <th style="min-width:400px";> İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -207,8 +207,8 @@
                 {
                     data: 'productDescription',
                     render: function (data, type, row) {
-                        if (data.length > 150) {
-                            return data.substring(0, 150) + '...';
+                        if (data.length > 75) {
+                            return data.substring(0, 75) + '...';
                         } else {
                             return data;
                         }
@@ -222,8 +222,8 @@
                     render: function (data, type, row) {
                         return '<button class="btn btn-warning mr-2" type="button" data-toggle="modal" data-target="#updateModal" onclick="UrunGuncelle(' + data.productID + ')"><i class="fa fa-edit pr-1"></i>Düzenle</button>' +
                             '<button class="btn btn-danger mr-2" type="button" onclick="UrunSil(' + data.productID + ')"><i class="fa fa-trash pr-1"></i>Sil</button>' +
-                            '<button class="btn btn-primary mr-2" onclick="FotoEkle(' + data.productID + ')"><i class="fa fa-camera pr-1"></i>Fotoğraf Ekle</button>';
-
+                            '<button class="btn btn-primary mr-2" onclick="FotoEkle(' + data.productID + ')"><i class="fa fa-camera pr-1"></i>Fotoğraf Ekle</button>' +
+                            '<button class="btn btn-info mr-2" onclick="AdminSec(' + data.productID + ')"><i class="fa fa-camera pr-1"></i>Öne Çıkar</button>';
                     }
                 }
             ]
@@ -356,6 +356,33 @@
 
 </script>
 
+    <script>
+        function AdminSec(productID) {
+            $.ajax({
+                url: '/Admin/Product/SetSuggestion',
+                type: 'POST',
+                data: { productID: productID },
+                success: function (response) {
+                    if (response.success) {
+                        // Başarılı yanıtta yapılacaklar
+                        toastr.success('Ürün önerisi güncellendi.');
+                        // DataTable'i güncelleyin (isteğe bağlı)
+                        table.ajax.reload();
+                    } else {
+                        // Başarısız yanıtta yapılacaklar
+                        toastr.error('Ürün önerisi güncellenirken hata oluştu: ' + response.message);
+                    }
+                },
+                error: function (error) {
+                    // Hata durumunda yapılacaklar
+                    toastr.error('Ürün önerisi güncellenirken hata oluştu: ' + error.statusText);
+                }
+            });
+        }
+    </script>
+
+
+@*Fotoğraf ekleme methodu*@
 <script>
     function FotoEkle(productID) {
         window.location.href = '/Admin/Product/AddProductImage/' + productID;

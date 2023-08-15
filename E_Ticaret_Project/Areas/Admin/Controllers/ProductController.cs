@@ -4,6 +4,7 @@ using E_Ticaret_Project.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +91,6 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
-
         [HttpPost]
         public JsonResult ProductUpdate(Product data)
         {
@@ -139,6 +139,55 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
             }
             //verileri burada yani post işlemi yaparken gönderiyordun bu doğru değil
             return View();
+        }
+
+
+        public IActionResult SetSuggestion()
+        {
+            var suggestedProducts = _baglanti.Products.Where(p => p.Suggestion).ToList();
+            return View(suggestedProducts);
+        }
+
+        //Adminin Seçtiği favori ürünler
+        [HttpPost]
+        public ActionResult SetSuggestion(int productID)
+        {
+            try
+            {
+                var product = _baglanti.Products.Find(productID);
+                if (product != null)
+                {
+                    product.Suggestion = true;
+                    _baglanti.SaveChanges(); // Değişiklikleri kaydet
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult RemoveSuggestion(int productID)
+        {
+            try
+            {
+                var product = _baglanti.Products.Find(productID);
+
+                if (product != null)
+                {
+                    product.Suggestion = false;
+                    _baglanti.SaveChanges(); // Değişiklikleri kaydet
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
     }

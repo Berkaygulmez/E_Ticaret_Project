@@ -1,0 +1,63 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "SetSuggestion";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ÖNE ÇIKARILAN ÜRÜNLER</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ürün Adı</th>
+            <th>Model</th>
+            <th>Marka</th>
+            <th>Kategori</th>
+            <th>İşlemler</th>
+            <!-- Diğer sütun başlıkları -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductID</td>
+                <td>@product.ProductName</td>
+                <td>@product.VersionID</td>
+                <td>@product.TrademarkID</td>
+                <td>@product.CategoryID</td>
+                <td>
+                    <button class="btn btn-danger" onclick="Kaldir(@product.ProductID)">Öne Çıkanlardan Kaldır.</button>
+                </td>
+                <!-- Diğer sütunlar için gerekli alanları ekleyin -->
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function Kaldir(productID) {
+        $.ajax({
+            url: '/Admin/Product/RemoveSuggestion',
+            type: 'POST',
+            data: { productID: productID },
+            success: function (response) {
+                if (response.success) {
+                    // Başarılı yanıtta yapılacaklar
+                    //bu toast mesaj sayfa yenilendiği için gösteremiyorum. Reacta felan geçmeliyim :/
+                    toastr.success('Ürün artık öne çıkan değil.');
+                    // Sayfayı yenileme veya gerekli güncellemeleri yapma
+                    location.reload();
+                } else {
+                    // Başarısız yanıtta yapılacaklar
+                    toastr.error('Ürün öne çıkarma işlemi sırasında hata oluştu: ' + response.message);
+                }
+            },
+            error: function (error) {
+                // Hata durumunda yapılacaklar
+                toastr.error('Ürün öne çıkarma işlemi sırasında hata oluştu: ' + error.statusText);
+            }
+        });
+    }
+</script>

@@ -31,6 +31,7 @@ namespace E_Ticaret_Project.Controllers
             model.TopViewProduct = _baglanti.Products.OrderByDescending(p => p.ProductViewCount)
                                                     .Take(4)
                                                     .ToList();
+            model.GetSuggestion = _baglanti.Products.Where(x => x.Suggestion == true).ToList();
             model.Categories = _baglanti.Categories.ToList(); // Burada ürünlerin kategorilerini getirdik
             model.Trademarks = _baglanti.Trademarks.ToList();
             model.Version = _baglanti.Versions.ToList();

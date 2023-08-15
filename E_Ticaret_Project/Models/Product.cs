@@ -6,7 +6,8 @@
         public string ProductName { get; set; }
         public int ProductPrice { get; set; }
         public string ProductDescription { get; set; }
-        public int ProductViewCount { get; set; }   
+        public int ProductViewCount { get; set; }
+        public bool Suggestion { get; set; }
         public int CategoryID { get; set; }  
         public Category Category { get; set; }
         public int TrademarkID { get; set; }

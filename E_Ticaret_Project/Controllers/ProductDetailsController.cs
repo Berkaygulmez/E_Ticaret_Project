@@ -32,6 +32,7 @@ namespace E_Ticaret_Project.Controllers
             };
 
 
+
             // bu sayede Ürüne her tıklandığında o ürünün görüntüleme saysını bir artırıp güncelleyebileceğiz
             if (product != null && product.Product != null)
             {

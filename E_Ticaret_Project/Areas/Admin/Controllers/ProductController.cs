@@ -138,7 +138,7 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
                 _baglanti.SaveChanges();
             }
             //verileri burada yani post işlemi yaparken gönderiyordun bu doğru değil
-            return View();
+            return RedirectToAction();
         }
 
 

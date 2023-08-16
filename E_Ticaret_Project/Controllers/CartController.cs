@@ -48,7 +48,7 @@ namespace E_Ticaret_Project.Controllers
                 Cart cart = new Cart { RegisterID = userID, ProductID = id, Piece = quantity };
 
                 //adam cart ına aynı üründen eklemişmi diye bakıyorum
-                var cartdaAyniUrunVarMı = _baglanti.Carts.Where(x => x.RegisterID == 8 && x.ProductID == id).ToList();
+                var cartdaAyniUrunVarMı = _baglanti.Carts.Where(x => x.RegisterID == userID && x.ProductID == id).ToList();
 
                 if(cartdaAyniUrunVarMı.Count() > 0) //eklemişse burası çalışacak
                 {

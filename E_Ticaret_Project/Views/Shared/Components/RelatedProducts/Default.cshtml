@@ -1,0 +1,87 @@
+﻿@model E_Ticaret_Project.ViewModels.ProductandProductImage
+
+<div class="col-md-2">
+    <div class="text-center">
+        <h2>İlginizi Çekebilir</h2>
+    </div>
+
+    <div class="ibox">
+        <div class="ibox-content product-box">
+@* Rastgele Ürün*@
+         
+            @if (Model.ProductImages != null )
+            {
+               
+                    <div>
+                        <div class="image-imitation pt-1 pb-1">
+                        <a href="/ProductDetails/Index/@Model.Product.ProductID">
+                        <img href ="/ProductDetails/Index/@Model.Product.ProductID" class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
+                         src="~/Image/ProductImage/@Model.ProductImages.ProductImageUrl" alt="Resim Açıklaması">
+                     </a>
+                        </div>
+                    </div>
+                
+            }
+            else
+            {
+                <div class="product-imitation">
+                    [ RESİM BULUNAMADI ]
+                </div>
+            }
+
+            <div class="product-desc">
+                <span class="product-price">
+                    @Model.Product.ProductPrice
+                </span>
+                <small class="text-muted">@Model.Category.CategoryName</small>
+                <a href="/ProductDetails/Index/@Model.Product.ProductID" class="product-name"> @Model.Product.ProductName</a>
+
+                <div class="small m-t-xs">
+                    @if (Model.Product.ProductDescription.Length > 75)
+                    {
+                        <text>@Model.Product.ProductDescription.Substring(0, 75)...</text>
+                    }
+                    else
+                    {
+                        <text>@Model.Product.ProductDescription</text>
+                    }
+                </div>
+
+                <div class="m-t text-righ">
+
+                    <a href="/ProductDetails/Index/@Model.Product.ProductID" class="btn btn-xs btn-outline btn-primary">Ürüne Git <i class="fa fa-long-arrow-right"></i> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+ @*   Son bakılan ürün*@
+    <div class="ibox">
+        <div class="ibox-content product-box">
+
+            <div class="product-imitation">
+                [ RESİM BULUNAMADI ]
+            </div>
+            <div class="product-desc">
+                <span class="product-price">
+                    $10
+                </span>
+                <small class="text-muted">Category</small>
+                <a href="#" class="product-name"> Product</a>
+
+
+
+                <div class="small m-t-xs">
+                    Many desktop publishing packages and web page editors now.
+                </div>
+                <div class="m-t text-righ">
+
+                    <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

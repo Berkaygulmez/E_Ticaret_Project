@@ -58,8 +58,11 @@ namespace E_Ticaret_Project
             {
                 options.RootDirectory = "/Areas";
             });
-
-
+            ////Son bakýlan ürün için
+            //services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromMinutes(20); // Oturumun ne kadar süre sonra sonlanacaðýný belirleyebilirsiniz
+            //});
             //services.AddControllersWithViews().AddRazorPagesOptions(options =>
             //{
             //    options.Conventions.AddAreaPageRoute("Areas", "/Home/Index", "Home/Index");
@@ -89,6 +92,9 @@ namespace E_Ticaret_Project
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            ////Son bakýlan ürün için
+            //app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

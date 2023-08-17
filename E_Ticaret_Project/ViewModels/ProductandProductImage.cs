@@ -13,6 +13,7 @@ namespace E_Ticaret_Project.ViewModels
         public ProductImage ProductImages { get; set; }
         public List<ProductImage> ProductImageList { get; set; }
         public List<Category> Categories { get; set; }
+        public Category Category { get; set; }
 
     }
 }

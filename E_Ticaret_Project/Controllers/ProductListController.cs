@@ -61,5 +61,10 @@ namespace E_Ticaret_Project.Controllers
         //{
         //    return _baglanti.Products.Where(p => p.CategoryID == categoryId).ToList();
         //}
+
+
+
+
+
     }
 }

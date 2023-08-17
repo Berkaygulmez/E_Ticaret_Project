@@ -97,6 +97,20 @@
         }
     </script>
 
+    <script>
+        // Sayfa yüklendiğinde çalışacak fonksiyon
+        window.onload = function () {
+            // 30 saniye beklemek için setTimeout kullanıyoruz
+            setTimeout(function () {
+                // Local Storage'da "sonBakilanUrun" adlı değişkeni oluşturup içine 1 değerini atıyoruz
+                localStorage.setItem('sonBakilanUrun', @Model.Product.ProductID);
+                console.log('localStorage updated: sonBakilanUrun = 1');
+            }, 30000); // 30 saniye = 30000 milisaniye
+        };
+    </script>
+
+
+
     }
 
 

@@ -72,5 +72,14 @@ namespace E_Ticaret_Project.Controllers
             return Json(searchResults);
         }
 
+        [HttpGet]
+        public IActionResult SonProduct(int id) //ben buraya ekledim bunun bir sayfası yok her controllerin bir sayfası olmak zorunda değil ben ajaxla buraya istek atıyorum bana ürünü veriyor
+        {
+
+            var data = _baglanti.Products.Find(id);
+            return Json(data);
+
+        }
+
     }
 }

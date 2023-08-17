@@ -7,20 +7,20 @@
 
     <div class="ibox">
         <div class="ibox-content product-box">
-@* Rastgele Ürün*@
-         
-            @if (Model.ProductImages != null )
+            @* Rastgele Ürün*@
+
+            @if (Model.ProductImages != null)
             {
-               
-                    <div>
-                        <div class="image-imitation pt-1 pb-1">
+
+                <div>
+                    <div class="image-imitation pt-1 pb-1">
                         <a href="/ProductDetails/Index/@Model.Product.ProductID">
-                        <img href ="/ProductDetails/Index/@Model.Product.ProductID" class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
-                         src="~/Image/ProductImage/@Model.ProductImages.ProductImageUrl" alt="Resim Açıklaması">
-                     </a>
-                        </div>
+                            <img href="/ProductDetails/Index/@Model.Product.ProductID" class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
+                                 src="~/Image/ProductImage/@Model.ProductImages.ProductImageUrl" alt="Resim Açıklaması">
+                        </a>
                     </div>
-                
+                </div>
+
             }
             else
             {
@@ -57,7 +57,7 @@
 
 
 
- @*   Son bakılan ürün*@
+    @*   Son bakılan ürün*@
     <div class="ibox">
         <div class="ibox-content product-box">
 
@@ -69,7 +69,7 @@
                     $10
                 </span>
                 <small class="text-muted">Category</small>
-                <a href="#" class="product-name"> Product</a>
+                <a href="#" class="product-name" id="productName"></a>
 
 
 
@@ -85,3 +85,19 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: 'Get',
+            url: '/Home/SonProduct/'+localStorage.getItem('sonBakilanUrun'), // Controller'ın bulunduğu URL
+            success: function (response) {
+                console.log('Başarılı:', response);
+                $('#productName').text(response.productName); //burda bize dönen response bizim ihtiyaçlarımızı karşılamıyor mesela bize category id geliyor ama bize category name lazım.
+            }, //url adresini takip et ve orda bizim ihtiyaçlarımıza uygun bir response döndür hatta ürün fotoğrafını da getir getirebiliyorsan hepsini getiremiyorsan bi taneside olur
+            error: function (xhr, status, error) {
+                console.log('Hata:', error);
+            }
+        });
+    });
+
+</script> 

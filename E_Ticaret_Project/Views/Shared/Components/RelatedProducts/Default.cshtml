@@ -16,7 +16,7 @@
                     <div class="image-imitation pt-1 pb-1">
                         <a href="/ProductDetails/Index/@Model.Product.ProductID">
                             <img href="/ProductDetails/Index/@Model.Product.ProductID" class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
-                                 src="~/Image/ProductImage/@Model.ProductImages.ProductImageUrl" alt="Resim Açıklaması">
+                             src="~/Image/ProductImage/@Model.ProductImages.ProductImageUrl" alt="Resim Açıklaması">
                         </a>
                     </div>
                 </div>
@@ -31,8 +31,9 @@
 
             <div class="product-desc">
                 <span class="product-price">
-                    @Model.Product.ProductPrice
+                    @Model.Product.ProductPrice.ToString("N0") ₺
                 </span>
+
                 <small class="text-muted">@Model.Category.CategoryName</small>
                 <a href="/ProductDetails/Index/@Model.Product.ProductID" class="product-name"> @Model.Product.ProductName</a>
 
@@ -65,38 +66,44 @@
                 [ RESİM BULUNAMADI ]
             </div>
             <div class="product-desc">
-                <span class="product-price">
-                    $10
+                <span class="product-price" id="productPrice">
+                    ₺
                 </span>
-                <small class="text-muted">Category</small>
+                <small class="text-muted" id="categoryName"></small>
                 <a href="#" class="product-name" id="productName"></a>
 
 
 
-                <div class="small m-t-xs">
-                    Many desktop publishing packages and web page editors now.
+                <div class="small m-t-xs" id="productDescription">
+                    x
                 </div>
                 <div class="m-t text-righ">
 
-                    <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                    <a href="#" class="btn btn-xs btn-outline btn-primary">Ürüne Git <i class="fa fa-long-arrow-right"></i> </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
+    //burda sayfa yüklendiğinde basit bir ajax istedi yapıyorum ben home contoller a yazdım ister farklı controller açarsın istersen orda kalır
+    //bu gidiyor bana bir tane ürün dönüyor ürün anladım şu sonproduct ismini değiştirsem zorlanmam dimi 2 yerde kullanıyorsun evet değiştirebilirsin
+    //ama bu görev tam olarak bitmedi niye mi dersen şöyle bir sorun var anlatayım
     $(document).ready(function () {
         $.ajax({
             type: 'Get',
-            url: '/Home/SonProduct/'+localStorage.getItem('sonBakilanUrun'), // Controller'ın bulunduğu URL
+            url: '/Home/SonProduct/' + localStorage.getItem('sonBakilanUrun'), // Controller'ın bulunduğu URL
             success: function (response) {
                 console.log('Başarılı:', response);
-                $('#productName').text(response.productName); //burda bize dönen response bizim ihtiyaçlarımızı karşılamıyor mesela bize category id geliyor ama bize category name lazım.
-            }, //url adresini takip et ve orda bizim ihtiyaçlarımıza uygun bir response döndür hatta ürün fotoğrafını da getir getirebiliyorsan hepsini getiremiyorsan bi taneside olur
-            error: function (xhr, status, error) {
-                console.log('Hata:', error);
-            }
+                $('#productId').text(response.productId),
+                    $('#productName').text(response.productName),
+                    $('#categoryName').text(response.categoryName),
+                    $('#productDescription').text(response.productDescription),
+                    $('#productPrice').text(response.productPrice),
+                    $('#productImageUrl').text(response.productImageUrl); //burda bize dönen response bizim ihtiyaçlarımızı karşılamıyor mesela bize category id geliyor ama bize category name lazım.
+            },
         });
     });
 

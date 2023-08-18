@@ -1,4 +1,6 @@
 ﻿using E_Ticaret_Project.Models;
+using E_Ticaret_Project.ValidationRules;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -26,30 +28,42 @@ namespace E_Ticaret_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Veritabanına kaydetme işlemleri burada yapılabilir
-
-                //var mailVarMı = sql e gidip mailadresi var mı diye bakacak linq kodu count dönderecek yani sayı
-
-                //if mailVarMı > 0  dan büyükse kaydetmesin çünkü o mail adresi kullanılmış else ise kaydetsin kaydetme kodları zaten aşağıda
-                if (_baglanti.Registers.Any(r => r.Mail == model.Mail))
+                
+                //Fluent Validation paketini kullanarak bir validasyon oluşturulup çağırıldı
+                RegisterValidator rv = new RegisterValidator();
+                ValidationResult result = rv.Validate(model);
+                //eğer değerler uygunsa çalışacak
+                if (result.IsValid)
                 {
-                    ModelState.AddModelError("", "Bu e-posta adresi zaten kullanımda.");
-                    TempData["ErrorMessage"] = "Bu e-posta adresi zaten kullanımda.";
-                    return RedirectToAction("Index");
-                }
+                    //if mailVarMı > 0  dan büyükse kaydetmesin çünkü o mail adresi kullanılmış else ise kaydetsin kaydetme kodları zaten aşağıda
+                    if (_baglanti.Registers.Any(r => r.Mail == model.Mail))
+                    {
+                        ModelState.AddModelError("", "Bu e-posta adresi zaten kullanımda.");
+                        TempData["ErrorMessage"] = "Bu e-posta adresi zaten kullanımda.";
+                        return RedirectToAction("Index");
+                    }
 
-                if (_baglanti.Registers.Any(r => r.UserName == model.UserName))
+                    if (_baglanti.Registers.Any(r => r.UserName == model.UserName))
+                    {
+                        ModelState.AddModelError("", "Bu kullanıcı adı zaten kullanımda.");
+                        TempData["ErrorMessage"] = "Bu kullanıcı adı zaten kullanımda.";
+                        return RedirectToAction("Index");
+                    }
+
+                    _baglanti.Registers.Add(model);
+                    _baglanti.SaveChanges();
+
+                    // Kayıt işlemi başarılı olduğunda, giriş sayfasına yönlendirin
+                    return RedirectToAction("Index", "LogIn");
+                }
+                //Validasyonlara takıldıysa ErrorMesajını döndersin
+                else
                 {
-                    ModelState.AddModelError("", "Bu kullanıcı adı zaten kullanımda.");
-                    TempData["ErrorMessage"] = "Bu kullanıcı adı zaten kullanımda.";
-                    return RedirectToAction("Index");
+                    foreach(var item in result.Errors)
+                    {
+                        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
+                    }
                 }
-
-                _baglanti.Registers.Add(model);
-                _baglanti.SaveChanges();
-
-                // Kayıt işlemi başarılı olduğunda, giriş sayfasına yönlendirin
-                return RedirectToAction("Index", "LogIn");
             }
 
             // ModelState.IsValid false olduğunda, hata mesajlarıyla birlikte kayıt sayfasını tekrar gösterin

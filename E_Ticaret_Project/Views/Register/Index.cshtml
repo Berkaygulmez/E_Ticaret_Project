@@ -31,19 +31,29 @@
             </div>
             <h3>Hemen kaydolun ve keşfedin!</h3>
             <p>Aşağıdaki bilgileri doldurunuz.</p>
-            <form class="m-t" method="post" action="/Register/Index">
+            @*//Form yerine bunu koyduk ki ValidationFLuent Paketini kullanabilelim.*@
+            @using (Html.BeginForm("Index", "Register", FormMethod.Post))
+            {
                 @*Burda method post çalıştığında action çalışır oda register controller daki Index i tetikler*@
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="İsim Soyisim" name="NameSurname" required="">  @*inputların name özelliklerine de veritabanındaki alana karşılık gelecek şekilde ayarla işte *@
+                    @* <input type="text" class="form-control" placeholder="İsim Soyisim" name="NameSurname" required="">*@
+                    @Html.TextBoxFor(x=>x.NameSurname, new {@class = "form-control" , @placeholder = "İsim Soyisim"})
+                    @Html.ValidationMessageFor(x=>x.NameSurname)
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Kullanıcı Adı" name="UserName" required="">
+                    @*<input type="text" class="form-control" placeholder="Kullanıcı Adı" name="UserName" required="">*@
+                    @Html.TextBoxFor(x=>x.UserName, new {@class = "form-control" , @placeholder = "Kullanıcı Adı"})
+                    @Html.ValidationMessageFor(x=>x.UserName)
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" placeholder="E-mail" name="Mail" required="">
+                    @*<input type="email" class="form-control" placeholder="E-mail" name="Mail" required="">*@
+                    @Html.TextBoxFor(x=>x.Mail, new {@class = "form-control" , @placeholder = "E-Mail"})
+                    @Html.ValidationMessageFor(x=>x.Mail)
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Şifre" name="Password" required="">
+                    @*           <input type="password" class="form-control" placeholder="Şifre" name="Password" required="">*@
+                    @Html.TextBoxFor(x=>x.Password, new {@class = "form-control" , @placeholder = "Şifre"})
+                    @Html.ValidationMessageFor(x=>x.Password)
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Şifre Tekrar" name="ConfirmPassword" onkeyup="SifreKontrol()" required="">
@@ -55,17 +65,12 @@
 
                 <p class="text-muted text-center"><small>Bir hesabınız var ise giriş yapın!</small></p>
                 <a class="btn btn-sm btn-white btn-block" href="/LogIn/Index">Giriş Yap</a>
-            </form>
+            }
             <p class="m-t"> <small>Tüm Hakları Saklıdır. @DateTime.Now.Year</small> </p>
         </div>
     </div>
 
-    <!-- Mainly scripts -->
-    <script src="~/Admin/js/jquery-3.1.1.min.js"></script>
-    <script src="~/Admin/js/popper.min.js"></script>
-    <script src="~/Admin/js/bootstrap.js"></script>
-    <!-- iCheck -->
-    <script src="~/Admin/js/plugins/iCheck/icheck.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('.i-checks').iCheck({
@@ -80,7 +85,7 @@
         function SifreKontrol() { //Onkeyup methodu ile verilen isimin çağırıldıyı yere gider
             var password = document.getElementsByName('Password')[0].value; //Şifre Alanına gelen şifreyi almak için kullanılır
             var confirmPassword = document.getElementsByName('ConfirmPassword')[0].value; //Şifre tekrarından gelen veriyi almak için kullanılır
-          
+
             var namesurname = document.getElementsByName('NameSurname')[0].value;
             var username = document.getElementsByName('UserName')[0].value;            // aynı şekilde bunlarda ilk veriyi çeker
             var mail = document.getElementsByName('Mail')[0].value;
@@ -89,16 +94,14 @@
             var kaydolBtn = document.getElementById('kaydolBtn'); //Kaydolbtn'una bir ID belirlendi ve o ID ile buton buraya çağırıldı.
 
             //buraya şey ekleyebilirsin. iki şifre doğruysa çalışsın ama
-            if (password === confirmPassword) 
-            {
+            if (password === confirmPassword) {
                 kaydolBtn.disabled = false;
-            } 
-            else 
-            {
+            }
+            else {
                 if ((namesurname.trim() === '') && (username.trim() === '') && (mail.trim() === '')) //burdaki if diğer alanlara baksın isim alanında, mail alanında bir veri var mı diye kontrol etsin eğer varsa kaydet butonu aktif olsun
                 {
                     kaydolBtn.disabled = true;
-                }             
+                }
             }
 
             //bunun altındaki kodlar gereksiz sadece consola bişey yazıyor kodun çalışıp çalışmadığını görmek için yazdı chatgpt
@@ -117,6 +120,15 @@
         </div>
     }
 
+
+
+
+    <!-- Mainly scripts -->
+    <script src="~/Admin/js/jquery-3.1.1.min.js"></script>
+    <script src="~/Admin/js/popper.min.js"></script>
+    <script src="~/Admin/js/bootstrap.js"></script>
+    <!-- iCheck -->
+    <script src="~/Admin/js/plugins/iCheck/icheck.min.js"></script>
 </body>
 
 </html>

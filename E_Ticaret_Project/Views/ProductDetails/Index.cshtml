@@ -98,13 +98,16 @@
     </script>
 
     <script>
+        //hikaye şöyle başlıyor sen bir kullancıısın ve x ürününe bakıyorsun sayfa yüklendiği an 
+        // 30 a kadar sayıyorum eğer 30 saniye o ürüne bakmışsan o zaman localstore de ki küçük değişkenime o ürünün ıd sini yazıyorum
+        //burayı anladık ister 30 saniyeyi kaldır ister 5 dk yap o artık satış stratejin nasılsa öyle ayarlanır
         // Sayfa yüklendiğinde çalışacak fonksiyon
         window.onload = function () {
             // 30 saniye beklemek için setTimeout kullanıyoruz
             setTimeout(function () {
                 // Local Storage'da "sonBakilanUrun" adlı değişkeni oluşturup içine 1 değerini atıyoruz
-                localStorage.setItem('sonBakilanUrun', @Model.Product.ProductID);
-                console.log('localStorage updated: sonBakilanUrun = 1');
+                localStorage.setItem('sonBakilanUrun', @Model.Product.ProductID); //kullanımı bu kadar kolay tek satır :) bu chrrome da bir yerde tutuyo bu bildiyi
+                console.log('localStorage updated: sonBakilanUrun =' + @Model.Product.ProductID); //burda consola yazmışım sen gör diye çok önemli değil hadi deneyelim
             }, 30000); // 30 saniye = 30000 milisaniye
         };
     </script>

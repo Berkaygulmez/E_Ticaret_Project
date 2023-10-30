@@ -32,6 +32,7 @@
                     <select class="form-control m-b" name="VersionID">
                         <option value=""></option>
                     </select>
+                    <input type="text" name="Stock" placeholder="Stok Adedi" class="form-control" required>
 
                 </div>
                 <div class="modal-footer">
@@ -72,6 +73,7 @@
                     <select class="form-control m-b" name="VersionID">
                         <option value=""></option>
                     </select>
+                    <input type="text" name="Stock" placeholder="Stok Adedi" class="form-control" required>
 
                 </div>
                 <div class="modal-footer">
@@ -104,7 +106,8 @@
                                 <th>Kategori</th>
                                 <th>Marka</th>
                                 <th>Model</th>
-                                <th style="min-width:400px";> İşlemler</th>
+                                <th>Stok</th>
+                                <th style="min-width:400px" ;> İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -217,6 +220,7 @@
                 { data: 'categoryName' },
                 { data: 'trademarkName' },
                 { data: 'versionName' },
+                { data: 'stock' },
                 {
                     data: null,
                     render: function (data, type, row) {
@@ -356,30 +360,30 @@
 
 </script>
 
-    <script>
-        function AdminSec(productID) {
-            $.ajax({
-                url: '/Admin/Product/SetSuggestion',
-                type: 'POST',
-                data: { productID: productID },
-                success: function (response) {
-                    if (response.success) {
-                        // Başarılı yanıtta yapılacaklar
-                        toastr.success('Ürün önerisi güncellendi.');
-                        // DataTable'i güncelleyin (isteğe bağlı)
-                        table.ajax.reload();
-                    } else {
-                        // Başarısız yanıtta yapılacaklar
-                        toastr.error('Ürün önerisi güncellenirken hata oluştu: ' + response.message);
-                    }
-                },
-                error: function (error) {
-                    // Hata durumunda yapılacaklar
-                    toastr.error('Ürün önerisi güncellenirken hata oluştu: ' + error.statusText);
+<script>
+    function AdminSec(productID) {
+        $.ajax({
+            url: '/Admin/Product/SetSuggestion',
+            type: 'POST',
+            data: { productID: productID },
+            success: function (response) {
+                if (response.success) {
+                    // Başarılı yanıtta yapılacaklar
+                    toastr.success('Ürün önerisi güncellendi.');
+                    // DataTable'i güncelleyin (isteğe bağlı)
+                    table.ajax.reload();
+                } else {
+                    // Başarısız yanıtta yapılacaklar
+                    toastr.error('Ürün önerisi güncellenirken hata oluştu: ' + response.message);
                 }
-            });
-        }
-    </script>
+            },
+            error: function (error) {
+                // Hata durumunda yapılacaklar
+                toastr.error('Ürün önerisi güncellenirken hata oluştu: ' + error.statusText);
+            }
+        });
+    }
+</script>
 
 
 @*Fotoğraf ekleme methodu*@

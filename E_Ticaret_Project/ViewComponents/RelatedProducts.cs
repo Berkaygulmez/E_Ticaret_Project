@@ -23,7 +23,7 @@ namespace E_Ticaret_Project.ViewComponents
 
 
             var randomProduct = _baglanti.Products.OrderBy(p => Guid.NewGuid()).FirstOrDefault();
-            var productImage = _baglanti.ProductImages.FirstOrDefault(pi => pi.ProductID == randomProduct.ProductID);
+            var productImage = _baglanti.ProductImages.Where(pi => pi.ProductID == randomProduct.ProductID).FirstOrDefault();
             var category = _baglanti.Categories.FirstOrDefault(c => c.CategoryID == randomProduct.CategoryID);
 
             var productAndImage = new ProductandProductImage

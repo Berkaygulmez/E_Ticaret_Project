@@ -8,6 +8,7 @@
         public string ProductDescription { get; set; }
         public int ProductViewCount { get; set; }
         public bool Suggestion { get; set; }
+        public int Stock { get; set; }
         public int CategoryID { get; set; }  
         public Category Category { get; set; }
         public int TrademarkID { get; set; }

@@ -4,14 +4,16 @@ using E_Ticaret_Project.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_Ticaret_Project.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030124453_product_stock")]
+    partial class product_stock
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,9 +135,6 @@ namespace E_Ticaret_Project.Migrations
                     b.Property<int>("ProductViewCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Stock")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Suggestion")
                         .HasColumnType("bit");
 
@@ -143,6 +142,9 @@ namespace E_Ticaret_Project.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("VersionID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("stock")
                         .HasColumnType("int");
 
                     b.HasKey("ProductID");

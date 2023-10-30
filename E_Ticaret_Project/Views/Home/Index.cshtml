@@ -91,7 +91,6 @@
                                 //boş değilse çalış
 
                                 //  <div class="product-imitation">
-                                    @*  ürüne ait kaç resim olduğu bizi bağlamaz ilk resmi alıcaz o yüzden foreach a gerek yok*@
                                     @foreach (var foto in Model.ProductImages.Where(x => x.ProductID == item.ProductID))
                                     {
                                         <div>
@@ -108,7 +107,7 @@
                                 }
                                 else
                                 {
-                                    //boşsa burası çalışır bişeyler oldu
+                                    //boşsa burası çalışır
 
                                     <div class="product-imitation">
                                         [ Resim Bulunamadı. ]

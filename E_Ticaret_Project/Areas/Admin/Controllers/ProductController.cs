@@ -67,7 +67,8 @@ namespace E_Ticaret_Project.Areas.Admin.Controllers
                      ProductDescription = pct.product.ProductDescription,
                      CategoryName = pct.category.CategoryName,
                      TrademarkName = pct.trademark.TrademarkName,
-                     VersionName = version.VersionName
+                     VersionName = version.VersionName,
+                     Stock= pct.product.Stock
                  })
            .ToList();
 

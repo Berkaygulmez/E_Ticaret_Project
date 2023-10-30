@@ -31,5 +31,7 @@ namespace E_Ticaret_Project.ValidationRules
                   ).WithMessage("Şifre en az 1 büyük harf, 1 küçük harf ve 1 sayı içermelidir.");
 
         }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using E_Ticaret_Project.Models;
+using E_Ticaret_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,7 +20,6 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult Index()//buraya daha sonra giriş yapan kullanıcının id sini gireriz ona göre listeyi getirir şimdikik kalsın bakalım
         {
-            //olabilir
             //sisteme otantike olan kullanıcının ID'si
             int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value); 
 
@@ -33,9 +33,74 @@ namespace E_Ticaret_Project.Controllers
             return View(cartsWithProducts);
         }
 
+        [HttpPost]
+        public IActionResult Index(int id) //şu id bişeye yaramıyor ama vermediğimde de naz yapıyor hata veriyordu hocaya gösterirken nasıl anlatıyim bir de bu stoğu felan nasıl yansıtabilirim modele
+        {
+            //index deki sipariş ver butonuna bastığımızda burası çalışacak stoğu düşürecek daha sonra gitmesi gereken sayfaya bizi atcak oynat bakalım
+            //sisteme otantike olan kullanıcının ID'si   Richtih doğru  Anlamadığın yer??
+            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+
+            var cartsWithProducts = _baglanti.Carts.Where(x => x.RegisterID == userID).Include(cart => cart.Product).ToList();
+
+            foreach (var item in cartsWithProducts)
+            {
+                var ürün = _baglanti.Products.Find(item.ProductID);
+                ürün.Stock += -1;
+
+                _baglanti.Products.Update(ürün);
+                _baglanti.SaveChanges();
+            }
+
+            return RedirectToAction("CartCompleted", "Cart"); //tamam bu buraya gitsin
+        }
+
         public IActionResult CartPay()
         {
             return View();
+        }
+
+        public IActionResult CartCompleted() //sipariş ver e basıldığında siparişiniz başarıyla alındı sayfasına gitmeden hemen önce stoğu düşürmeliyiz
+        {
+            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+
+            var register = _baglanti.Registers.Find(userID);
+
+
+
+            //sipariş tamamlanmışsa sepetten ürünü silen kodlar
+            var userCartItems = _baglanti.Carts.Where(c => c.RegisterID == Convert.ToInt64(userID)).ToList();
+
+            if (userCartItems.Any())
+            {
+                // Kullanıcının sepetinde ürün varsa, sipariş oluşturun ve "Order" tablosuna taşıyın
+                foreach (var cartItem in userCartItems)
+                {
+                    var orderItem = new Order
+                    {
+                        RegisterID = cartItem.RegisterID,
+                        ProductID = cartItem.ProductID,
+                        Piece = cartItem.Piece,
+                    };
+
+                    // Sipariş öğesini "Order" tablosuna ekleyin
+                    _baglanti.Orders.Add(orderItem);
+                }
+
+                // Sepetteki tüm öğeleri "Cart" tablosundan kaldırın
+                _baglanti.Carts.RemoveRange(userCartItems);
+
+                // Veritabanında değişiklikleri kaydedin
+                _baglanti.SaveChanges();
+            }
+
+
+
+
+                var viewModel = new RegisterViewModel
+            {
+                Register = register
+            };
+            return View(viewModel);
         }
 
         [HttpPost]

@@ -43,7 +43,7 @@
                                                         }
                                                         productDescription += "..."; // Son kelimenin sonuna üç nokta ekle
                                                     }
-                                                    @productDescription
+                                                        @productDescription
                                                 }
                                             </p>
 
@@ -54,16 +54,14 @@
                                         </td>
 
                                         <td>
-                                            @cart.Product.ProductPrice.ToString("N0") ₺
+                                          Stok:  @cart.Product.Stock
                                         </td>
-                                        <td width="65">
-                                            <input onchange="updateTotal()" type="number" id="inputValue" class="form-control" placeholder="1" min="1" value="@cart.Piece">
+                                        <td width="85">
+                                            <input onchange="updateTotal()" type="number" id="inputValue" class="form-control" placeholder="1" min="1" max="@cart.Product.Stock" value="@cart.Piece">
                                         </td>
                                         <td>
                                             <h4 id="productPrice">
                                                 @string.Format("{0:N0}", cart.Piece * cart.Product.ProductPrice) ₺
-
-                                               @* @(cart.Piece * cart.Product.ProductPrice).ToString("N0")) ₺*@
                                             </h4>
                                         </td>
                                     </tr>
@@ -103,8 +101,8 @@
                     </span>
                     <div class="m-t-sm">
                         <div>
-                            <form action="@Url.Action("CartPay", "Cart")" method="post">
-                                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Siparişi Tamamla</button>
+                            <form action="@Url.Action("Index", "Cart")" method="post">
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Siparişi Ver</button>
                             </form>
                         </div>
                     </div>
@@ -137,5 +135,4 @@
         });
     }
 </script>
-
 

@@ -19,6 +19,17 @@
                                 foreach (var item in Model.ProductImageList)
                                 {
                                     <div>
+                                        @if (Model.Product.Stock < 20 && Model.Product.Stock != 0)
+                                        {
+                                            <span class="label label-warning float-right">Stok Tükenmek Üzere</span>
+                                        }
+                                        else
+                                        {
+                                            @if (Model.Product.Stock == 0)
+                                            {
+                                                <span class="label label-danger float-right">Stok Tükendi</span>
+                                            }
+                                        }
                                         <div class="image-imitation pt-1 pb-1">
                                             <img class="img-fluid" style="margin: 10px; width: 100%; height: 200px; object-fit: scale-down; align-items: center; justify-content: center; display: flex;"
                                          src="~/Image/ProductImage/@item.ProductImageUrl" alt="Resim Açıklaması">
@@ -28,6 +39,7 @@
                             }
                             else
                             {
+
                                 <div class="product-imitation">
                                     [ Resim Bulunamadı. ]
                                 </div>
@@ -47,9 +59,18 @@
                         <div>
                             <form action="/Cart/AddToCart/@Model.Product.ProductID" method="post">
                                 @*Burda productID yide gönderelim ki hangi ürünü sepete eklediğimizi bilelim*@
-                                <button type="submit" class="btn btn-primary btn-lg float-right" onclick="addToCart()">
-                                    <i class="fa fa-shopping-cart"></i> Sepete Ekle
-                                </button>
+                                @if (Model.Product.Stock != 0)
+                                {
+                                    <button type="submit" class="btn btn-primary btn-lg float-right" onclick="addToCart()">
+                                        <i class="fa fa-shopping-cart"></i> Sepete Ekle
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary btn-lg float-right" onclick="addToCart()" disabled>
+                                        <i class="fa fa-shopping-cart"></i> Stokta Yok
+                                    </button>
+                                }
                             </form>
 
 
@@ -98,7 +119,7 @@
     </script>
 
     <script>
-        //hikaye şöyle başlıyor sen bir kullancıısın ve x ürününe bakıyorsun sayfa yüklendiği an 
+        //hikaye şöyle başlıyor sen bir kullancıısın ve x ürününe bakıyorsun sayfa yüklendiği an
         // 30 a kadar sayıyorum eğer 30 saniye o ürüne bakmışsan o zaman localstore de ki küçük değişkenime o ürünün ıd sini yazıyorum
         //burayı anladık ister 30 saniyeyi kaldır ister 5 dk yap o artık satış stratejin nasılsa öyle ayarlanır
         // Sayfa yüklendiğinde çalışacak fonksiyon

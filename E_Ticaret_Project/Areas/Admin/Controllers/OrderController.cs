@@ -1,14 +1,17 @@
 ﻿using E_Ticaret_Project.Areas.Admin.Models;
 using E_Ticaret_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace E_Ticaret_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class OrderController : Controller
     {
         private readonly MyDbContext _baglanti;

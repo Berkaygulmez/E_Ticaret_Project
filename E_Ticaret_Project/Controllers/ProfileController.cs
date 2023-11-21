@@ -18,7 +18,7 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult Index()
         {
-            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+            int userID = int.Parse(User.FindFirst(ClaimTypes.SerialNumber).Value);
 
             var register = _baglanti.Registers.Find(userID);
             var registerAddress = _baglanti.RegisterAddresses.Where(x => x.RegisterID == userID).ToList(); //o kullanıcıya ait tüm adreslerin listesini alıyorum

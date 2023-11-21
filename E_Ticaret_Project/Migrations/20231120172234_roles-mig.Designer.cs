@@ -4,14 +4,16 @@ using E_Ticaret_Project.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_Ticaret_Project.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231120172234_roles-mig")]
+    partial class rolesmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,18 +197,10 @@ namespace E_Ticaret_Project.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RolesRoleID")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RegisterID");
-
-                    b.HasIndex("RolesRoleID");
 
                     b.ToTable("Registers");
                 });
@@ -238,10 +232,15 @@ namespace E_Ticaret_Project.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("RegisterID")
+                        .HasColumnType("int");
+
                     b.Property<string>("RoleName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RoleID");
+
+                    b.HasIndex("RegisterID");
 
                     b.ToTable("Roles");
                 });
@@ -346,16 +345,18 @@ namespace E_Ticaret_Project.Migrations
                     b.Navigation("product");
                 });
 
-            modelBuilder.Entity("E_Ticaret_Project.Models.Register", b =>
+            modelBuilder.Entity("E_Ticaret_Project.Models.RegisterAddress", b =>
                 {
-                    b.HasOne("E_Ticaret_Project.Models.Roles", "Roles")
+                    b.HasOne("E_Ticaret_Project.Models.Register", "Register")
                         .WithMany()
-                        .HasForeignKey("RolesRoleID");
+                        .HasForeignKey("RegisterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Roles");
+                    b.Navigation("Register");
                 });
 
-            modelBuilder.Entity("E_Ticaret_Project.Models.RegisterAddress", b =>
+            modelBuilder.Entity("E_Ticaret_Project.Models.Roles", b =>
                 {
                     b.HasOne("E_Ticaret_Project.Models.Register", "Register")
                         .WithMany()

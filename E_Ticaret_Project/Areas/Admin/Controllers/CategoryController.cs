@@ -1,15 +1,18 @@
 ﻿//using E_Ticaret_Project.Migrations;
 using E_Ticaret_Project.Helpers;
 using E_Ticaret_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace E_Ticaret_Project.Areas.Admin.Controllers
 { 
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
 

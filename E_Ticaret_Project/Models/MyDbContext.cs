@@ -17,5 +17,7 @@ namespace E_Ticaret_Project.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<RegisterAddress> RegisterAddresses { get; set; }
+        public DbSet<Roles> Roles { get; set; }
+
     }
 }

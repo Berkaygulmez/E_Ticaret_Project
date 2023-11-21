@@ -30,6 +30,7 @@ namespace E_Ticaret_Project.Controllers
         public async Task<IActionResult> Index(Register register)
         {
             var user = _baglanti.Registers.FirstOrDefault(u => u.UserName == register.UserName); // bağlanı üzerinden register tablosundaki USERNAME'den verileri çeken LINQ sorgusu
+            var role = _baglanti.Roles.ToList();
 
             if (user != null)
             {
@@ -53,7 +54,8 @@ namespace E_Ticaret_Project.Controllers
                     var claims = new List<Claim>                        // claimler ile Otantike oldundu
                     { 
                         new Claim(ClaimTypes.Name,user.UserName),
-                        new Claim(ClaimTypes.Role,user.RegisterID.ToString())
+                        new Claim(ClaimTypes.SerialNumber,user.RegisterID.ToString()),
+                        new Claim(ClaimTypes.Role,user.Roles.RoleName.ToString())
                     };
                     var useridentity = new ClaimsIdentity(claims, "a");
                     ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);

@@ -6,10 +6,13 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using E_Ticaret_Project.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace E_Ticaret_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class SliderController : Controller
     {
         private readonly MyDbContext _baglanti;

@@ -43,7 +43,7 @@
                                                         }
                                                         productDescription += "..."; // Son kelimenin sonuna üç nokta ekle
                                                     }
-                                                        @productDescription
+                                                            @productDescription
                                                 }
                                             </p>
 
@@ -54,10 +54,10 @@
                                         </td>
 
                                         <td>
-                                          Stok:  @cart.Product.Stock
+                                            Stok:  @cart.Product.Stock
                                         </td>
                                         <td width="85">
-                                            <input onchange="updateTotal()" type="number" id="inputValue" class="form-control" placeholder="1" min="1" max="@cart.Product.Stock" value="@cart.Piece">
+                                            <input onchange="updateTotal(this)" type="number" class="form-control" placeholder="1" min="1" max="@cart.Product.Stock" value="@cart.Piece">
                                         </td>
                                         <td>
                                             <h4 id="productPrice">
@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-       
+
     </div>
 </div>
 
@@ -136,3 +136,28 @@
     }
 </script>
 
+
+
+<script>
+    function updateTotal(inputElement) {
+
+        var inputValue = inputElement.value;
+        var maxValue = inputElement.getAttribute("max");
+
+        if (parseInt(inputValue) > maxValue) {
+            alert("Değer stok adedinden büyük olamaz!");
+            inputElement.value = maxValue; // Max değeri atama
+        }
+        // $.ajax({
+        //    success: function (response) {
+        //        // Toast mesajını gösterme
+        //        toastr.success(response.message, 'Başarılı');
+        //    },
+        //    error: function (response) {
+        //        toastr.error(response.responseJSON.message, 'Hata');
+        //    }
+        //});
+        // Diğer işlemleri burada yapabilirsiniz
+    }
+
+</script>

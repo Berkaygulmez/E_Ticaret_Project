@@ -21,7 +21,7 @@ namespace E_Ticaret_Project.Controllers
         public IActionResult Index()//buraya daha sonra giriş yapan kullanıcının id sini gireriz ona göre listeyi getirir şimdikik kalsın bakalım
         {
             //sisteme otantike olan kullanıcının ID'si
-            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value); 
+            int userID = int.Parse(User.FindFirst(ClaimTypes.SerialNumber).Value); 
 
             var cartsWithProducts = _baglanti.Carts.Where(x=>x.RegisterID == userID).Include(cart => cart.Product).ToList();
 
@@ -38,7 +38,7 @@ namespace E_Ticaret_Project.Controllers
         {
             //index deki sipariş ver butonuna bastığımızda burası çalışacak stoğu düşürecek daha sonra gitmesi gereken sayfaya bizi atcak oynat bakalım
             //sisteme otantike olan kullanıcının ID'si   Richtih doğru  Anlamadığın yer??
-            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+            int userID = int.Parse(User.FindFirst(ClaimTypes.SerialNumber).Value);
 
             var cartsWithProducts = _baglanti.Carts.Where(x => x.RegisterID == userID).Include(cart => cart.Product).ToList();
 
@@ -61,7 +61,7 @@ namespace E_Ticaret_Project.Controllers
 
         public IActionResult CartCompleted() //sipariş ver e basıldığında siparişiniz başarıyla alındı sayfasına gitmeden hemen önce stoğu düşürmeliyiz
         {
-            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+            int userID = int.Parse(User.FindFirst(ClaimTypes.SerialNumber).Value);
 
             var register = _baglanti.Registers.Find(userID);
 
@@ -106,7 +106,7 @@ namespace E_Ticaret_Project.Controllers
         [HttpPost]
         public IActionResult AddToCart(int id, int quantity = 1)
         {
-            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+            int userID = int.Parse(User.FindFirst(ClaimTypes.SerialNumber).Value);
             try
             {
 

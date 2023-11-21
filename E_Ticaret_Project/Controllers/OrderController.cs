@@ -40,7 +40,7 @@ namespace E_Ticaret_Project.Controllers
             //    }
             //}
 
-            int userID = int.Parse(User.FindFirst(ClaimTypes.Role).Value);
+            int userID = int.Parse(User.FindFirst(ClaimTypes.SerialNumber).Value);
 
             var userCartItems = _baglanti.Carts.Where(c => c.RegisterID == Convert.ToInt64(userID)).ToList();
 

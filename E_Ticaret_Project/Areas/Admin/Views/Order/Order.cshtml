@@ -22,7 +22,7 @@
                         <tbody>
                             @if (Model != null && Model.Any())
                             {
-                                @foreach (var order in Model)
+                                @foreach (var order in Model.OrderByDescending(o => o.OrderID))
                                 {
                                     <tr>
                                         <td>@order.OrderID</td>
@@ -52,48 +52,3 @@
         </div>
     </div>
 </div>
-
-
-@*<div id="wrapper">
-    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
-                            <thead>
-                                <tr>
-                                    <th>Sipariş ID</th>
-                                    <th data-hide="phone">Müşteri</th>
-                                    <th data-hide="phone">Ürün</th>
-                                    <th data-hide="phone">Adet</th>
-                                    <th data-hide="phone">Status</th>
-                                    <th class="text-right">İşlemler</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var order in Model)
-                                {
-                                    <tr>
-                                        <td>@order.OrderID</td>
-                                        <td>@order.RegisterID</td>
-                                        <td>@order.ProductID</td>
-                                        <td>@order.Piece</td>
-                                        <td class="text-right">
-                                            <div class="btn-group">
-                                                <button class="btn-white btn btn-xs">View</button>
-                                                <button class="btn-white btn btn-xs">Edit</button>
-                                                <button class="btn-white btn btn-xs">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-*@

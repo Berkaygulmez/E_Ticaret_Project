@@ -50,6 +50,7 @@ namespace E_Ticaret_Project.Controllers
                         return RedirectToAction("Index");
                     }
 
+                    model.RoleID = 2;
                     _baglanti.Registers.Add(model);
                     _baglanti.SaveChanges();
 
